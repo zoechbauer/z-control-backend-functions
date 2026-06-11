@@ -1,4 +1,4 @@
-// keep in sync with src/app/shared/interfaces.ts
+// keep in sync with FE: src/app/shared/interfaces.ts
 
 // used by z-control Translator (MLT)
 export interface FirestoreContingentData {

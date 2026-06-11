@@ -1,8 +1,8 @@
 import { HttpsError } from 'firebase-functions/v2/https';
 
-// IMPORTANT: Do not change the path of FireStoreConstants as it is used in both the functions and the Angular app.
-// functions/src/shared/app.constants.ts
-// src/app/shared/app.constants.ts
+// IMPORTANT: Do not change the path of FireStoreConstants as it is used in both the functions and the Angular apps.
+// BE: functions/src/shared/app.constants.ts
+// FE: src/app/shared/app.constants.ts
 
 export class FireStoreConstants {
   static readonly COLLECTION_NAME = 'ZC_ionic_setup';
@@ -10,6 +10,7 @@ export class FireStoreConstants {
   private static readonly APP_TO_COLLECTION: Record<string, string> = {
     ionic_setup: FireStoreConstants.COLLECTION_NAME,
     translator: 'MLT_translations_statistics',
+    image_to_text: 'ZC_image_to_text_statistics',
   };
 
   static readonly getCollectionByAppId = (appId: string): string => {
