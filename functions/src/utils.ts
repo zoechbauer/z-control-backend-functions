@@ -6,7 +6,7 @@ import { ProgrammerDeviceUID } from './shared/firebase-firestore.interfaces.js';
  */
 const getErrorMsg = (
   error: any,
-  errorMessage: string = 'An unknown error occurred.',
+  errorMessage = 'An unknown error occurred.',
 ): string => {
   if (error && typeof error === 'object' && 'message' in error) {
     errorMessage = error.message || errorMessage;

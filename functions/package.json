@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint --ext .js,.ts --ignore-pattern vitest.config.ts --ignore-pattern vitest.learn.config.ts .",
+    "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "test": "vitest run",
@@ -29,19 +29,16 @@
     "firebase-functions": "^7.1.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/parser": "^8.54.0",
-    "@vitest/coverage-istanbul": "^4.1.5",
-    "@vitest/ui": "^4.1.5",
-    "eslint": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.57.1",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
-    "firebase-functions-test": "^3.1.0",
-    "typescript": "^4.9.5",
-    "vitest": "^4.1.4"
+    "firebase-functions-test": "^3.4.1",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.4",
+    "@vitest/ui": "^4.1.5",
+    "@vitest/coverage-istanbul": "^4.1.5"
   },
-  "private": true,
-  "volta": {
-    "node": "20.20.1"
-  }
+  "private": true
 }

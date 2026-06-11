@@ -22,11 +22,11 @@ export const createMissingContingentData = onCall(async (request) => {
   if (featureType !== undefined && featureType !== FeatureType.MLT && featureType !== FeatureType.Feature) {
     throw new HttpsError('invalid-argument', 'featureType must be either undefined for MLT or "feature".');
   }
-  
+
   try {
     const collection = FireStoreConstants.getCollectionByAppId(appId);
     const userId = auth.uid;
-    
+
     const firestoreService = new FirebaseFirestoreService(collection, userId);
     if (featureType === FeatureType.Feature) {
       await firestoreService.createMissingFeatureContingentData();
@@ -35,7 +35,7 @@ export const createMissingContingentData = onCall(async (request) => {
     }
     return { success: true };
   } catch (error) {
-    let errorMessage = 'Error creating missing contingent data.';
+    const errorMessage = 'Error creating missing contingent data.';
     console.error(errorMessage, error);
     throw new HttpsError('internal', getErrorMsg(error, errorMessage));
   }

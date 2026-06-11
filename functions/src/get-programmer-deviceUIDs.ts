@@ -21,12 +21,12 @@ export const getProgrammerDeviceUIDs = onCall(async (request) => {
   try {
     const collection = FireStoreConstants.getCollectionByAppId(appId);
     const userId = auth.uid;
-    
+
     const firestoreService = new FirebaseFirestoreService(collection, userId);
     const programmerDevices = await firestoreService.getProgrammerDeviceUIDs();
     return { programmerDevices };
   } catch (error) {
-    let errorMessage = 'Error retrieving programmer device UIDs.';
+    const errorMessage = 'Error retrieving programmer device UIDs.';
     console.error(errorMessage, error);
     throw new HttpsError('internal', getErrorMsg(error, errorMessage));
   }

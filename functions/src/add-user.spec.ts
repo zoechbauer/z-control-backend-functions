@@ -99,7 +99,7 @@ describe('addUser', () => {
   it('should throw invalid argument HttpsError if data is missing', async () => {
     const request = {
       ...makeRequest('user1'),
-      data: undefined
+      data: undefined,
     };
     const call = (addUser as any)(request);
 
@@ -177,7 +177,7 @@ describe('addUser', () => {
   });
 
   it('should return { success: true } when firestoreService adds user successfully', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.addUser = vi.fn().mockResolvedValue(undefined);
@@ -196,7 +196,7 @@ describe('addUser', () => {
   });
 
   it('should throw internal HttpsError if firestoreService.addUser throws an error', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.addUser = vi.fn().mockRejectedValue(new Error('Some error'));
@@ -219,7 +219,7 @@ describe('addUser', () => {
   });
 
   it('should throw internal HttpsError with default message if thrown error has no message', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.addUser = vi.fn().mockRejectedValue(new Error());
@@ -243,7 +243,7 @@ describe('addUser', () => {
 
   it('should log the error when firestoreService.addUser throws an error', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error');
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.addUser = vi.fn().mockRejectedValue(new Error('Some error'));

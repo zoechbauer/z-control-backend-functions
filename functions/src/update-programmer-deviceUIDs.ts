@@ -44,12 +44,12 @@ export const updateProgrammerDeviceUIDs = onCall(async (request) => {
   try {
     const collection = FireStoreConstants.getCollectionByAppId(appId);
     const userId = auth.uid;
-    
+
     const firestoreService = new FirebaseFirestoreService(collection, userId);
     await firestoreService.updateProgrammerDeviceUIDs(programmerDeviceUIDs);
     return { success: true };
   } catch (error) {
-    let errorMessage = 'Error updating programmer device UIDs.';
+    const errorMessage = 'Error updating programmer device UIDs.';
     console.error(errorMessage, error, {
       programmerDeviceUIDs,
     });

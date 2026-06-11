@@ -64,7 +64,7 @@ describe('secureFeature', () => {
     const addConsumedFeatureChars =
       addConsumedFeatureCharsImpl ?? vi.fn().mockResolvedValue(undefined);
 
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.addConsumedFeatureChars = addConsumedFeatureChars;

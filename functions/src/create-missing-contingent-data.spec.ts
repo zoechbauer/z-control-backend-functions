@@ -68,12 +68,12 @@ describe('createMissingContingentData', () => {
     await expect(call).rejects.toMatchObject(expected);
   });
 
-    it.each([
-      {featureType: undefined },
-      {featureType: FeatureType.Feature },
-      {featureType: FeatureType.MLT },
-    ])
-    (`should not throw invalid-argument HttpsError if correct feature type [$featureType] is provided`, async ({ featureType }) => {
+  it.each([
+    { featureType: undefined },
+    { featureType: FeatureType.Feature },
+    { featureType: FeatureType.MLT },
+  ])
+  (`should not throw invalid-argument HttpsError if correct feature type [$featureType] is provided`, async ({ featureType }) => {
     const request = makeRequest('user1', appId, featureType);
     const call = (createMissingContingentData as any)(request);
     const expected = {
@@ -95,7 +95,7 @@ describe('createMissingContingentData', () => {
   });
 
   it('should return { success: true } when firestoreService creates missing contingent data successfully', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.createMissingContingentData = vi.fn().mockResolvedValue(undefined);
@@ -109,7 +109,7 @@ describe('createMissingContingentData', () => {
 
   it('should throw internal HttpsError if firestoreService.createMissingContingentData throws an error', async () => {
     const error = new Error('Some error');
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.createMissingContingentData = vi.fn().mockRejectedValue(error);
@@ -127,7 +127,7 @@ describe('createMissingContingentData', () => {
   });
 
   it('should throw internal HttpsError with default message if thrown error has no message', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.createMissingContingentData = vi.fn().mockRejectedValue({});

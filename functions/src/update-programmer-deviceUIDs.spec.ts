@@ -98,7 +98,7 @@ describe('updateProgrammerDeviceUIDs', () => {
   });
 
   it('should return { success: true } when firestoreService updates programmer device UIDs successfully', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.updateProgrammerDeviceUIDs = vi.fn().mockResolvedValue(undefined);
@@ -116,7 +116,7 @@ describe('updateProgrammerDeviceUIDs', () => {
   });
 
   it('should throw internal HttpsError if firestoreService.updateProgrammerDeviceUIDs throws an error', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.updateProgrammerDeviceUIDs = vi
@@ -141,7 +141,7 @@ describe('updateProgrammerDeviceUIDs', () => {
   });
 
   it('should throw internal HttpsError with default message if thrown error has no message', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.updateProgrammerDeviceUIDs = vi.fn().mockRejectedValue(new Error());

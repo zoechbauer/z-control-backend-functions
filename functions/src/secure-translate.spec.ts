@@ -64,7 +64,7 @@ describe('secureTranslate', () => {
     const addTranslatedChars =
       addTranslatedCharsImpl ?? vi.fn().mockResolvedValue(undefined);
 
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.addTranslatedChars = addTranslatedChars;
@@ -280,7 +280,7 @@ describe('secureTranslate', () => {
       vi.doMock('./firebase-firestore.service.js', () => ({
         FirebaseFirestoreService: vi
           .fn()
-          .mockImplementation(function (this: any) {
+          .mockImplementation(function(this: any) {
             this.addTranslatedChars = vi.fn().mockResolvedValue(undefined);
           }),
       }));
@@ -316,9 +316,9 @@ describe('secureTranslate', () => {
       expect(fetchSpy).not.toHaveBeenCalled();
 
       vi.unstubAllGlobals();
-      if (originalEnvKey === undefined)
+      if (originalEnvKey === undefined) {
         delete process.env.GOOGLE_TRANSLATE_API_KEY;
-      else process.env.GOOGLE_TRANSLATE_API_KEY = originalEnvKey;
+      } else process.env.GOOGLE_TRANSLATE_API_KEY = originalEnvKey;
     });
 
     it('throws internal error if fetch fails', async () => {

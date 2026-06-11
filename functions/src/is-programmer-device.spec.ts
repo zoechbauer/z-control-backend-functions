@@ -43,27 +43,27 @@ describe('isProgrammerDevice', () => {
   });
 
   it('should throw invalid-argument HttpsError if appId is missing', async () => {
-      const request = makeRequest('user1'); // { auth: { uid: 'user1' }, data: undefined }
-      const call = (isProgrammerDevice as any)(request);
-      const expected = {
-        code: 'invalid-argument',
-        message: 'appId must be provided.',
-      };
-      await expect(call).rejects.toMatchObject(expected);
-    });
-  
-    it('should throw internal HttpsError if wrong appId is provided', async () => {
-      const request = makeRequest('user1', 'wrongAppId'); // { auth: { uid: 'user1' }, data: { appId: 'wrongAppId' } }
-      const call = (isProgrammerDevice as any)(request);
-      const expected = {
-        code: 'internal',
-        message: 'Unsupported appId: wrongAppId',
-      };
-      await expect(call).rejects.toMatchObject(expected);
-    });
+    const request = makeRequest('user1'); // { auth: { uid: 'user1' }, data: undefined }
+    const call = (isProgrammerDevice as any)(request);
+    const expected = {
+      code: 'invalid-argument',
+      message: 'appId must be provided.',
+    };
+    await expect(call).rejects.toMatchObject(expected);
+  });
+
+  it('should throw internal HttpsError if wrong appId is provided', async () => {
+    const request = makeRequest('user1', 'wrongAppId'); // { auth: { uid: 'user1' }, data: { appId: 'wrongAppId' } }
+    const call = (isProgrammerDevice as any)(request);
+    const expected = {
+      code: 'internal',
+      message: 'Unsupported appId: wrongAppId',
+    };
+    await expect(call).rejects.toMatchObject(expected);
+  });
 
   it('should return { isProgrammerDevice: true } when firestoreService returns true', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.isProgrammerDevice = vi.fn().mockResolvedValue(true);
@@ -74,7 +74,7 @@ describe('isProgrammerDevice', () => {
   });
 
   it('should return { isProgrammerDevice: false } when firestoreService returns false', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.isProgrammerDevice = vi.fn().mockResolvedValue(false);
@@ -85,7 +85,7 @@ describe('isProgrammerDevice', () => {
   });
 
   it('should throw internal HttpsError with the error message if firestoreService throws', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.isProgrammerDevice = vi
@@ -102,7 +102,7 @@ describe('isProgrammerDevice', () => {
   });
 
   it('should throw internal HttpsError with default message if thrown error has no message', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.isProgrammerDevice = vi.fn().mockRejectedValue({});

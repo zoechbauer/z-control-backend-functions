@@ -106,7 +106,7 @@ describe('FirebaseFirestoreService', () => {
       expect(mockGet).toHaveBeenCalled();
     });
   });
-  
+
   describe('readFeatureContingentData', () => {
     it('should return feature contingent data from current month for the user', async () => {
       const mockDocData: FeatureContingentData = {
@@ -934,9 +934,9 @@ describe('FirebaseFirestoreService', () => {
   });
 
   describe('addUser', () => {
-    let programmerDeviceUIDs: ProgrammerDeviceUID[],
-      deviceInfo: DeviceInfo,
-      isNative: boolean;
+    let programmerDeviceUIDs: ProgrammerDeviceUID[];
+    let deviceInfo: DeviceInfo;
+    let isNative: boolean;
 
     beforeEach(() => {
       programmerDeviceUIDs = [

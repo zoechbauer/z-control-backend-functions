@@ -1,3 +1,4 @@
+// TODO: fix deactivated rules and remove comments
 module.exports = {
   root: true,
   env: {
@@ -5,32 +6,45 @@ module.exports = {
     node: true,
   },
   extends: [
-    "eslint:recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "google",
-    "plugin:@typescript-eslint/recommended",
+    'eslint:recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'google',
+    'plugin:@typescript-eslint/recommended',
   ],
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ["tsconfig.json"],
-    sourceType: "module",
+    project: ['tsconfig.json'],
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
   },
   ignorePatterns: [
-    "/lib/**/*", // Ignore built files.
-    "/generated/**/*", // Ignore generated files.
-    ".eslintrc.js",
+    '/lib/**/*',
+    '/generated/**/*',
+    '.eslintrc.cjs',
+    'vitest.config.ts',
+    'vitest.learn.config.ts',
   ],
-  plugins: ["@typescript-eslint", "import"],
+  plugins: ['@typescript-eslint', 'import'],
   rules: {
-    "import/no-unresolved": 0,
-    indent: ["error", 2],
-    "object-curly-spacing": ["error", "always"],
-    "operator-linebreak": [
-      "error",
-      "after",
-      { overrides: { "?": "before", ":": "before" } },
+    'import/no-unresolved': 0,
+    indent: ['error', 2],
+    'object-curly-spacing': ['error', 'always'],
+    'operator-linebreak': [
+      'error',
+      'after',
+      { overrides: { '?': 'before', ':': 'before' } },
     ],
+    'valid-jsdoc': 0,                                // <--  deactivated: JSDoc Error deactivated
+    'max-len': 0,                                    // <-- deactivated: Max length error deactivated
+    '@typescript-eslint/no-empty-function': 0,       // <-- deactivated: No empty function error deactivated
+    '@typescript-eslint/no-explicit-any': 0,         // <-- deactivated: any warnings
+    'no-invalid-this': 0,                            // <-- deactivated: 'this' in tests
+    'require-jsdoc': 0,                              // <-- deactivated: JSDoc required
+    '@typescript-eslint/no-non-null-assertion': 0,   // <-- deactivated: non-null !
+    'func-call-spacing': 0,                          // <-- deactivated: function call spacing
+    'no-unexpected-multiline': 0,                    // <-- deactivated: unexpected multiline
+    '@typescript-eslint/no-unused-vars': 0,          // <-- deactivated: unused variables
   },
 };

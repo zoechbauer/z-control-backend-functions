@@ -71,7 +71,7 @@ describe('FirebaseFirestoreUtilsService.isDeepEqual', () => {
   it('returns false if object have different keys', () => {
     right = {
       'a-different': 1,
-      nested: {
+      'nested': {
         count: 5,
       },
     };
@@ -251,7 +251,7 @@ describe('validateContingentOrThrow', () => {
   it('logs if firestore contingent data is not found', async () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readContingentData = vi
@@ -284,7 +284,7 @@ describe('validateContingentOrThrow', () => {
   });
 
   it('throws if contingent is exceeded', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readContingentData = vi.fn().mockResolvedValue({ any: 'flags' });
@@ -307,7 +307,7 @@ describe('validateContingentOrThrow', () => {
   }, 10000);
 
   it('resolves if contingent is not exceeded', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readContingentData = vi.fn().mockResolvedValue({ any: 'flags' });
@@ -341,7 +341,7 @@ describe('validateFeatureContingentOrThrow', () => {
   it('logs if firestore contingent data is not found', async () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readFeatureContingentData = vi
@@ -376,7 +376,7 @@ describe('validateFeatureContingentOrThrow', () => {
   });
 
   it('throws if contingent is exceeded', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readFeatureContingentData = vi
@@ -401,7 +401,7 @@ describe('validateFeatureContingentOrThrow', () => {
   }, 10000);
 
   it('resolves if feature contingent is not exceeded', async () => {
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readFeatureContingentData = vi

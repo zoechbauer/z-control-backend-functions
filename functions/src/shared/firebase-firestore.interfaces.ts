@@ -16,8 +16,8 @@ export interface FeatureContingentData {
   maxFreeFeatureCharsPerMonthForUser?: number;
 }
 
-// used to unify the structure of contingent data for both MLT and Feature, 
-// allowing for easier handling in the service layer and potential future features 
+// used to unify the structure of contingent data for both MLT and Feature,
+// allowing for easier handling in the service layer and potential future features
 // that may require similar contingent data structures.
 export interface ContingentData {
   StopForAllUsers?: boolean;
@@ -69,10 +69,10 @@ export interface AddUserData {
   programmerDeviceUIDs: ProgrammerDeviceUID[];
   deviceInfo: DeviceInfo;
   isNative?: boolean;
-};
+}
 
 export interface UpdateProgrammerDeviceUIDsData {
   appId: string;
   userId?: string;
   programmerDeviceUIDs: ProgrammerDeviceUID[];
-};
+}

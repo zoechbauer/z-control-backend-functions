@@ -25,12 +25,12 @@ export const isProgrammerDevice = onCall(async (request) => {
   try {
     const collection = FireStoreConstants.getCollectionByAppId(appId);
     const userId = auth.uid;
-    
+
     const firestoreService = new FirebaseFirestoreService(collection, userId);
     const isProgrammerDevice = await firestoreService.isProgrammerDevice();
     return { isProgrammerDevice };
   } catch (error) {
-    let errorMessage = 'Error checking if device is a programmer device.';
+    const errorMessage = 'Error checking if device is a programmer device.';
     console.error(errorMessage, error);
     throw new HttpsError('internal', getErrorMsg(error, errorMessage));
   }

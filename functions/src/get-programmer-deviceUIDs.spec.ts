@@ -72,7 +72,7 @@ describe('getProgrammerDeviceUIDs', () => {
         deviceInfo: { model: 'Model B', platform: 'Android' },
       },
     ];
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.getProgrammerDeviceUIDs = vi
@@ -88,7 +88,7 @@ describe('getProgrammerDeviceUIDs', () => {
 
   it('should throw internal HttpsError if firestoreService.getProgrammerDeviceUIDs throws an error', async () => {
     const error = new Error('Some error');
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.getProgrammerDeviceUIDs = vi.fn().mockRejectedValue(error);
@@ -105,7 +105,7 @@ describe('getProgrammerDeviceUIDs', () => {
 
   it('should throw internal HttpsError with default message if firestoreService.getProgrammerDeviceUIDs throws an error without a message', async () => {
     const error = new Error();
-    vi.mocked(FirebaseFirestoreService).mockImplementation(function (
+    vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any
     ) {
       this.getProgrammerDeviceUIDs = vi.fn().mockRejectedValue(error);
