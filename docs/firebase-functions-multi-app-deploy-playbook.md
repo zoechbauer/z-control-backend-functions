@@ -1,8 +1,6 @@
-# Multi-App Firebase Functions Playbook (Tailored)
+# Multi-App Firebase Functions Playbook
 
 ## Scope
-
-This document is tailored to the current setup in this repository and your related apps.
 
 Current known mapping:
 
@@ -17,9 +15,8 @@ Primary goal:
 
 Current runtime status:
 
-- Translator app is already upgraded and deployed.
 - `appId` is required by backend callables (strict mode).
-- Setup app repository is the deployment owner for shared functions.
+- z-control Backend Functions repository is the deployment owner for shared functions.
 
 ## Current Source Of Truth
 
@@ -84,13 +81,11 @@ Migration is complete for current active apps.
 - Requests without valid `appId` should fail with `invalid-argument`.
 - No translator fallback is required in the current setup.
 
-If a future app introduces legacy clients, add a temporary fallback only for that app and remove it after the migration window.
-
 ## Deployment Ownership Policy (Required)
 
 Only one repository is allowed to deploy shared Firebase Functions:
 
-- Deployment owner: this setup app repository
+- Deployment owner: z-control Backend Functions repository
 - Non-owner app repositories may include `firebase.json` / `functions` for reference or local testing
 - Non-owner app repositories must not deploy shared functions to production
 
@@ -102,24 +97,24 @@ Rationale:
 
 ## Code Handling Model (Required)
 
-If a new function is added for the translator app, keep the backend implementation in the setup app repository.
+If a new function is added for the translator app, keep the backend implementation in the z-control Backend Functions repository.
 
-- Setup app repository is the canonical backend source of truth.
+- z-control Backend Functions repository is the canonical backend source of truth.
 - Translator app repository may stay FE-only for runtime and deployment purposes.
 - The translator app does not need a second deployed copy of the backend code.
 - If you need shared compile-time types or request shapes, keep them aligned intentionally across repos or extract them into a shared package.
-- During local integration testing, run the backend emulator from the setup app and point the translator FE at that backend while using `ionic serve`.
+- During local integration testing, run the backend emulator from the z-control Backend Functions repository and point the translator FE at that backend while using `ionic serve`.
 
 In practice:
 
-- Edit BE logic in setup app
-- Test translator FE against setup backend/emulator
-- Deploy functions only from setup app
+- Edit BE logic in z-control Backend Functions repository
+- Test translator FE against z-control Backend Functions backend/emulator
+- Deploy functions only from z-control Backend Functions repository
 - Deploy translator FE separately when the UI change is ready
 
 ## GitHub Actions Policy Snippet
 
-Copy-paste guardrail for the setup app CI. It blocks shared-functions changes in any repo other than the setup repository.
+Copy-paste guardrail for the z-control Backend Functions CI. It blocks shared-functions changes in any repo other than the z-control Backend Functions repository.
 
 ```yaml
 name: guard-shared-functions
@@ -131,7 +126,7 @@ jobs:
   block-non-owner-repos:
     runs-on: ubuntu-latest
     steps:
-      - name: Ensure this repo is the setup repo
+      - name: Ensure this repo is the z-control Backend Functions repository
         run: |
           if [ "${{ github.repository }}" != "your-org/z-control-ionic-setup" ]; then
             echo "Shared Firebase Functions may only be changed in the setup repository."
@@ -183,8 +178,8 @@ firebase deploy --only functions
 
 ## No-Downtime Rollout Sequence
 
-1. Backend update in setup app repository.
-2. Deploy functions from setup app repository only.
+1. Backend update in z-control Backend Functions repository.
+2. Deploy functions from z-control Backend Functions repository only.
 3. Frontend release(s) for affected app(s).
 4. Monitor logs/errors after rollout.
 
@@ -194,12 +189,12 @@ firebase deploy --only functions
 - [ ] `getCollectionByAppId(...)` contains all active apps
 - [ ] Unknown appIds return `invalid-argument`
 - [ ] No accidental deletion of still-used functions
-- [ ] Deploy is executed from setup app repository only
+- [ ] Deploy is executed from z-control Backend Functions repository only
 - [ ] CI/CD credentials for non-owner repos cannot deploy functions
 
 ## CI/CD Guardrails (Recommended)
 
-- Use a dedicated service account for functions deploy in setup app CI only.
+- Use a dedicated service account for functions deploy in z-control Backend Functions CI only.
 - Do not store deploy-capable Firebase tokens/secrets in non-owner repositories.
 - Protect production deploy workflow with branch protection and required reviews.
 - Require build and test success before `firebase deploy --only functions`.
