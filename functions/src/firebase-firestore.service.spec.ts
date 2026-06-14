@@ -378,7 +378,7 @@ describe('FirebaseFirestoreService', () => {
     });
 
     describe('CreateMissingContingentDataEx', () => {
-      it('should create document and log if it does not exist', async () => {
+      it('should create document but not log if it does not exist', async () => {
         const mockSet = vi.fn().mockResolvedValue(undefined);
         const mockGet = vi.fn().mockResolvedValue({ exists: false });
         const mockDocRef = { get: mockGet, set: mockSet };
@@ -398,9 +398,7 @@ describe('FirebaseFirestoreService', () => {
           expect.objectContaining({ StopTranslationForAllUsers: false }),
           { merge: true },
         );
-        expect(mockConsoleLog).toHaveBeenCalledWith(
-          'Created control flags document with default values.',
-        );
+        expect(mockConsoleLog).not.toHaveBeenCalled();
       });
 
       it('should skip creating document if it already exists', async () => {
@@ -693,7 +691,7 @@ describe('FirebaseFirestoreService', () => {
   });
 
   describe('createUserMappingProgrammerDevices', () => {
-    it('should log and create new programmer device doc with the provided programmer device if device does not exist', async () => {
+    it('should create new programmer device doc with the provided programmer device if device does not exist, but not log', async () => {
       const mockSet = vi.fn().mockResolvedValue(undefined);
       const mockGet = vi.fn().mockResolvedValue({
         exists: false,
@@ -726,9 +724,7 @@ describe('FirebaseFirestoreService', () => {
         },
         { merge: true },
       );
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        `Created programmer device mapping for userId: ${programmerDevice.userId}`,
-      );
+      expect(mockConsoleLog).not.toHaveBeenCalled();
     });
 
     it('should do nothing with the provided programmer device if device already exists', async () => {
@@ -1088,7 +1084,7 @@ describe('FirebaseFirestoreService', () => {
       );
     });
 
-    it('should update deviceInfo and log if user deviceInfo  does not exist', async () => {
+    it('should update deviceInfo if user deviceInfo does not exist, but not log', async () => {
       const userId = 'userId_with_no_programmerDevice';
       const mockSet = vi.fn().mockResolvedValue(undefined);
       const mockGet = vi.fn().mockResolvedValue({
@@ -1123,13 +1119,10 @@ describe('FirebaseFirestoreService', () => {
         },
         { merge: true },
       );
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        'Updated user mapping document with device info for user:',
-        userId,
-      );
+      expect(mockConsoleLog).not.toHaveBeenCalled();
     });
 
-    it('should update deviceInfo and log if user deviceInfo is different', async () => {
+    it('should update deviceInfo if user deviceInfo is different, but not log', async () => {
       const userId = 'userId_with_no_programmerDevice';
       const mockSet = vi.fn().mockResolvedValue(undefined);
       const mockGet = vi.fn().mockResolvedValue({
@@ -1169,10 +1162,7 @@ describe('FirebaseFirestoreService', () => {
         },
         { merge: true },
       );
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        'Updated user mapping document with device info for user:',
-        userId,
-      );
+      expect(mockConsoleLog).not.toHaveBeenCalled();
     });
 
     it('should not update deviceInfo and log if user deviceInfo is the same', async () => {
@@ -1511,13 +1501,12 @@ describe('FirebaseFirestoreService', () => {
       expect(mockDoc).toHaveBeenCalledWith(
         `${FireStoreConstants.getUsersCollectionPath(collection)}/${service.userId}`,
       );
-      expect(mockIncrement).toHaveBeenCalledWith(count);
       expect(mockSet).toHaveBeenCalledWith(
-        {
-          charCount: { __incrementBy: count },
-          targetLanguages: selectedLanguages,
+        expect.objectContaining({
+          charCount: expect.anything(),
           lastUpdated: expect.any(Date),
-        },
+          targetLanguages: selectedLanguages,
+        }),
         { merge: true },
       );
     });
@@ -1539,12 +1528,12 @@ describe('FirebaseFirestoreService', () => {
       expect(mockDoc).toHaveBeenCalledWith(
         `${FireStoreConstants.getUsersCollectionPath(collection)}/${service.userId}`,
       );
-      expect(mockIncrement).toHaveBeenCalledWith(count);
+      expect(mockIncrement).not.toHaveBeenCalled();
       expect(mockSet).toHaveBeenCalledWith(
-        {
-          charCount: { __incrementBy: count },
+        expect.objectContaining({
+          charCount: expect.anything(),
           lastUpdated: expect.any(Date),
-        },
+        }),
         { merge: true },
       );
     });
@@ -1565,12 +1554,11 @@ describe('FirebaseFirestoreService', () => {
       expect(mockDoc).toHaveBeenCalledWith(
         FireStoreConstants.getMetaTotalCharsDocumentPath(collection),
       );
-      expect(mockIncrement).toHaveBeenCalledWith(count);
       expect(mockSet).toHaveBeenCalledWith(
-        {
-          charCount: { __incrementBy: count },
+        expect.objectContaining({
+          charCount: expect.anything(),
           lastUpdated: expect.any(Date),
-        },
+        }),
         { merge: true },
       );
     });

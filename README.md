@@ -9,6 +9,7 @@ This repository contains the shared backend logic used by multiple z-control app
 This repository is intended for:
 - Shared Firebase Cloud Functions.
 - Firestore-related backend utilities and helpers.
+- z-control GitHub Analytics functions and related documentation.
 - Shared backend constants and services.
 - Backend unit tests and test utilities.
 - Documentation for backend development and deployment. 
@@ -21,6 +22,7 @@ This repository is not intended for frontend application code. Frontend-specific
 - Firebase Cloud Functions for data processing, API handling, and Firebase integration. 
 - Firestore utilities and rules-related backend support. 
 - Quota management and backend-side error handling. 
+- GitHub Analytics functions for automated traffic data fetching and Firestore storage.
 - Unit tests with Vitest and coverage reporting. 
 - Documentation for setup, usage, and development workflows. 
 
@@ -62,10 +64,12 @@ z-control-backend-functions/
 │   └── .gitignore
 ├── docs/
 │   ├── unit-tests/
-│   └── README.md
+│   ├── README.md             # Documentation index
+│   └── *.md                  # Documentation files   
 ├── .firebaserc
 ├── firebase.json
 ├── LICENSE
+├── CHANGELOG.md              
 └── README.md
 ```
 
@@ -137,7 +141,6 @@ npm run lint -- --fix
 
 The `tools/` folder contains helper scripts for:
 - Backing up non-committed files.
-- Generating environment files from `.env.local`. 
 
 See `tools/README.md` for details. 
 
@@ -154,3 +157,9 @@ This repository is a local development utility for backend work. It does not col
 For questions, feedback, or support:
 - [z-control Support & Feedback](https://z-control-4070.web.app/home)
 - [zcontrol.app.qr@gmail.com](mailto:zcontrol.app.qr@gmail.com)
+
+---
+
+## Version History
+
+See [CHANGELOG.md](./CHANGELOG.md) for detailed release notes and version history.

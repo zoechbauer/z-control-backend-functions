@@ -26,8 +26,8 @@ Guides for setting up, running, and improving unit tests with Vitest, including 
 - **functions-vitest-setup.md**  
   Step-by-step guide for setting up Vitest in a Firebase project, including installation, configuration, and running tests.
 
--**test-types-fe-be.md** 
-  Overview of different test types for frontend and backend, with examples and best practices for each.
+-**test-types-fe-be.md**
+Overview of different test types for frontend and backend, with examples and best practices for each.
 
 ## C. Google Firebase API
 
@@ -48,11 +48,25 @@ Guides for setting up, running, and improving unit tests with Vitest, including 
 - **firebase-functions-setup-and-deploy.md**  
   Comprehensive guide for setting up and deploying Firebase Functions, including project initialization, codebase structure, deployment commands, and best practices for safe deployments.
 
-  - **fe-be-regression-checklist.md**  
+- **firebase-backup-restore-guide.md**  
+  Guide for backing up and restoring Firestore collections for z-control applications. Includes backup and restore methods, and best practices.
+
+- **firestore-export-import-troubleshooting.md**  
+  Troubleshooting guide for Firestore export and import operations, including common errors, solutions, and best practices for data integrity and consistency.
+
+- **fe-be-regression-checklist.md**  
   Release checklist for validating frontend/backend integration between setup and translator flows, including emulator startup, callable success, Firestore updates, appId contract checks, and deployment safety.
 
 - **local-testing-guide-secureTranslate.md**  
   How to test the SecureTranslate Cloud Function locally using the Firebase Emulator Suite and dotenv for environment variables. Includes curl examples, debugging, and troubleshooting steps.
+
+## D. z-control GitHub Analytics
+
+- **github-analytics-architecture.md**  
+  Detailed architecture document for the GitHub Analytics feature, covering data fetching, Firestore storage structure, shared constants, and local testing instructions.
+
+- **github-analystics-test-locally.md**  
+  Instructions for testing the GitHub Analytics Cloud Function locally using the Firebase Emulator Suite, including environment variable setup and curl examples.
 
 ---
 

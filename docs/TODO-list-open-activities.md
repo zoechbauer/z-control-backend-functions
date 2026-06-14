@@ -4,9 +4,13 @@ This document tracks open activities and follow-up tasks for the **z-control Bac
 
 ## Open tasks
 
-- [ ] Fix the remaining 4 of 172 unit test errors.
+- [x] Move functions from the z-control Landing Page project to this backend repository.
+- [x] Update documentation to reflect the new repository structure and function locations.
+- [x] Add a Change Log file to document all changes and updates in a structured format.
+- [x] Fix the remaining 8 of 172 unit test errors. 
+        Reason: I removed the console log in the function, but the tests were still expecting it to be called.
+- [ ] Add unit tests for the GitHub Analytics functions.
 - [ ] Activate lint errors in the lint configuration and fix the remaining issues.
-- [ ] Move functions from the z-control Landing Page project to this backend repository.
 - [ ] Improve the folder structure of the backend functions project.
 
 ## Notes

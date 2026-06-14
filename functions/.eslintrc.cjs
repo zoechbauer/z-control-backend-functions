@@ -25,6 +25,7 @@ module.exports = {
     '.eslintrc.cjs',
     'vitest.config.ts',
     'vitest.learn.config.ts',
+    'tools/generate-env.js',
   ],
   plugins: ['@typescript-eslint', 'import'],
   rules: {

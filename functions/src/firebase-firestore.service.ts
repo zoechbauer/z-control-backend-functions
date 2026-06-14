@@ -1,4 +1,5 @@
-import admin from 'firebase-admin';
+import { db } from './shared/firebase-admin.js';
+import { FieldValue } from 'firebase-admin/firestore';
 import { FireStoreConstants, UserType } from './shared/app.constants.js';
 import {
   CharCountAndTargetLangsResult,
@@ -11,12 +12,11 @@ import { getDeviceName, getUserType, isValidDevice } from './utils.js';
 import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
 
 export class FirebaseFirestoreService {
-  private readonly db: admin.firestore.Firestore;
+  private readonly db = db;
   private readonly collection: string;
   private readonly userId: string;
 
   constructor(collection: string, userId: string) {
-    this.db = admin.firestore();
     this.collection = collection;
     this.userId = userId;
   }
@@ -565,7 +565,7 @@ export class FirebaseFirestoreService {
     );
     await docRef.set(
       {
-        charCount: admin.firestore.FieldValue.increment(count),
+        charCount: FieldValue.increment(count),
         targetLanguages: selectedLanguages,
         lastUpdated: new Date(),
       },
@@ -583,7 +583,7 @@ export class FirebaseFirestoreService {
     );
     await docRef.set(
       {
-        charCount: admin.firestore.FieldValue.increment(count),
+        charCount: FieldValue.increment(count),
         lastUpdated: new Date(),
       },
       { merge: true },
@@ -600,7 +600,7 @@ export class FirebaseFirestoreService {
     );
     await totalRef.set(
       {
-        charCount: admin.firestore.FieldValue.increment(count),
+        charCount: FieldValue.increment(count),
         lastUpdated: new Date(),
       },
       { merge: true },
