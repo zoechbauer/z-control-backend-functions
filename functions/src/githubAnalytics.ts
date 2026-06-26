@@ -88,7 +88,7 @@ const fetchTraffic = async (
 
 /**
  * Fetches GitHub analytics traffic data (views and clones) for each repository
- * in `REPOS`,  * optionally updates the Firestore collection with the latest
+ * in `REPOS`, optionally updates the Firestore collection with the latest
  * traffic data, and saves the traffic history for each repository.
  *
  * @param {boolean} updateTraffic - If `true`,
