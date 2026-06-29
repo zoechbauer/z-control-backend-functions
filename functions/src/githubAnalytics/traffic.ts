@@ -12,12 +12,14 @@ import { saveGithubAnalyticsTrafficHistory } from './history.js';
  * @param {boolean} updateTraffic - If `true`,
  *        updates the Firestore collection with the latest traffic data.
  * @param {number} [repoIndex] - Optional index of the repository in `REPOS`
+ * @param {boolean} [isLogging=false] - If `true`, logs detailed information for debugging.
  * @return {Promise<void>} A Promise that resolves
  *        when all analytics data has been fetched and processed.
  */
 export const runGitHubAnalyticsFetch = async (
   updateTraffic = true,
   repoIndex?: number,
+  isLogging = false,
 ): Promise<void> => {
   // If repoIndex is a valid number, process only that repo,
   // else process all repos
@@ -27,10 +29,10 @@ export const runGitHubAnalyticsFetch = async (
     repoIndex < REPOS.length
   ) {
     const { owner, repo } = REPOS[repoIndex];
-    await processRepo(owner, repo, updateTraffic);
+    await processRepo(owner, repo, updateTraffic, isLogging);
   } else {
     for (const { owner, repo } of REPOS) {
-      await processRepo(owner, repo, updateTraffic);
+      await processRepo(owner, repo, updateTraffic, isLogging);
     }
   }
 };
@@ -75,10 +77,18 @@ export const fetchTraffic = async (
   }
 };
 
+/**
+ * Processes a GitHub repository by fetching its traffic data and optionally updating Firestore.
+ * @param owner - Repository owner (GitHub username).
+ * @param repo - Repository name.
+ * @param updateTraffic - If `true`, updates the Firestore collection with the latest traffic data.
+ * @param isLogging - If `true`, logs detailed information for debugging.
+ */
 export const processRepo = async (
   owner: string,
   repo: string,
   updateTraffic: boolean,
+  isLogging = false,
 ): Promise<void> => {
   try {
     const views = await fetchTraffic(owner, repo, 'views');
@@ -93,7 +103,7 @@ export const processRepo = async (
           clones,
         });
     }
-    await saveGithubAnalyticsTrafficHistory(owner, repo);
+    await saveGithubAnalyticsTrafficHistory(owner, repo, isLogging);
   } catch (error) {
     logger.error(`Error fetching analytics for ${repo}:`, error);
     console.error(`Error fetching analytics for ${repo}:`, error);

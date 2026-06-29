@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import * as logger from 'firebase-functions/logger';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as logger from 'firebase-functions/logger';
 
 // Load dotenv for local test with firebase emulators
 // GITHUB_TOKEN for production must be defined as environment variable in https://console.cloud.google.com/functions

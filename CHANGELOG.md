@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.1] - 2026-06-29
+
+### Added
+- Added unit tests for GitHub analytics functions to improve correctness and reliability.
+- Added unit tests for `testEnv.ts` to verify that environment variables are loaded correctly and that the script behaves as expected.
+- Added `github-analytics-explanation.md` to document GitHub Analytics metrics, including clones, unique clones, visitors, and unique visitors, with examples and explanations of how GitHub counts them.
+- Added the `isLogging` parameter to `processRepo` in `traffic.ts` to control logging behavior during testing and production runs. It defaults to `false`, reducing noise in production while still allowing detailed logging during testing and debugging.
+
+### Removed
+- Removed the `logInfo` property from the `testGitHubAnalytics` response because logging is now handled internally and no longer needs to be exposed.
+
 ## [2.0] - 2026-06-27
 
 ### Added

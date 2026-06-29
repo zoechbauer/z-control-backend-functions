@@ -65,8 +65,11 @@ Overview of different test types for frontend and backend, with examples and bes
 - **github-analytics-architecture.md**  
   Detailed architecture document for the GitHub Analytics feature, covering data fetching, Firestore storage structure, shared constants, and local testing instructions.
 
-- **github-analystics-test-locally.md**  
+- **github-analytics-test-locally.md**  
   Instructions for testing the GitHub Analytics Cloud Function locally using the Firebase Emulator Suite, including environment variable setup and curl examples.
+
+- **github-analytics-explanation.md**  
+  Explanation of GitHub Analytics metrics, including clones, unique clones, visitors, and unique visitors. Provides examples and clarifies how GitHub counts these metrics.
 
 ---
 

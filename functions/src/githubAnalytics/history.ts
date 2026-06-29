@@ -5,9 +5,6 @@ import { db } from '../shared/firebase-admin.js';
 import { COLLECTION } from '../shared/GitHubConstants.js';
 import { GithubTrafficEntry, HistoryData, LogInfo } from './types.js';
 
-// Temporary logs for debugging
-let logInfo: LogInfo = {};
-
 /**
  * Persists daily GitHub analytics data in Firestore.
  * The 'githubAnalyticsTrafficHistory' collection holds historical data
@@ -17,10 +14,12 @@ let logInfo: LogInfo = {};
  * daily entries since the function started.
  * @param {string} owner - GitHub repository owner.
  * @param {string} repo - GitHub repository name.
+ * @param {boolean} isLogging - If true, logs detailed information for debugging.
  */
 export const saveGithubAnalyticsTrafficHistory = async (
   owner: string,
   repo: string,
+  isLogging = false,
 ): Promise<void> => {
   try {
     // Get latest analytics snapshot for the repo
@@ -90,15 +89,13 @@ export const saveGithubAnalyticsTrafficHistory = async (
       }
     }
 
-    if (logInfo.calledBy === 'testGitHubAnalytics') {
-      logger.log('[DEBUG] analyticsData:', analyticsData);
-      logger.log('[DEBUG] updateData:', updateData);
-      logInfo = {
+    if (isLogging) {
+      const logInfo: LogInfo = {
         repo,
         analyticsData,
         updateData,
-        calledBy: logInfo.calledBy,
       };
+      logger.log('[DEBUG] logInfo:', logInfo);
     }
 
     await docRefHistory.set(updateData, { merge: true });

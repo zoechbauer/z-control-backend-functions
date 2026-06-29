@@ -3,12 +3,9 @@ import { https, scheduler } from 'firebase-functions/v2';
 
 import { REPOS } from '../shared/GitHubConstants.js';
 import { runGitHubAnalyticsFetch } from './traffic.js';
-import { GithubTrafficEntry, LogInfo } from './types.js';
+import { GithubTrafficEntry } from './types.js';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAnalyticsData, getHistoryData, getHistoryEntries, updateHistoryData } from './history.js';
-
-// Temporary logs for debugging
-const logInfo: LogInfo = {};
 
 /**
  * Scheduled function to fetch GitHub analytics and store in Firestore.
@@ -47,19 +44,17 @@ export const testGitHubAnalytics = https.onRequest(async (req, res) => {
   logger.info('testGitHubAnalytics HTTP function started');
   console.log('testGitHubAnalytics HTTP function started');
   try {
-    logInfo.calledBy = 'testGitHubAnalytics';
     const updateTraffic = req.query.updateTraffic !== 'false';
     const repoIndexString = req.query.repoIndex;
     const repoIndex = repoIndexString
       ? Number.parseInt(repoIndexString as string, 10)
       : undefined;
 
-    await runGitHubAnalyticsFetch(updateTraffic, repoIndex);
+    await runGitHubAnalyticsFetch(updateTraffic, repoIndex, true);
 
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json({
-      message: 'GitHub analytics fetched and stored.',
-      logInfo: logInfo,
+      message: 'GitHub analytics fetched and stored data with Firebase logging.',
     });
   } catch (error) {
     logger.error('Error in testGitHubAnalytics:', error);

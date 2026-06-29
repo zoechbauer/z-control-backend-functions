@@ -18,6 +18,7 @@ export const REPOS = [
   { owner: 'zoechbauer', repo: 'ionic-angular21-vitest-setup' },
 ];
 
+// Firestore collection names for GitHub analytics data
 export const COLLECTION = {
   GITHUB_ANALYTICS_TRAFFIC: 'githubAnalyticsTraffic',
   GITHUB_ANALYTICS_TRAFFIC_HISTORY: 'githubAnalyticsTrafficHistory',

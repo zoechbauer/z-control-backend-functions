@@ -5,6 +5,9 @@ import { HttpsError } from 'firebase-functions/v2/https';
 // FE: src/app/shared/app.constants.ts
 
 export class FireStoreConstants {
+  // These constants are used for Firestore contingent data and user mapping collections.
+  // Constants for GitHub analytics collections are defined in ./GitHubConstants.ts
+
   static readonly COLLECTION_NAME = 'ZC_ionic_setup';
 
   private static readonly APP_TO_COLLECTION: Record<string, string> = {
