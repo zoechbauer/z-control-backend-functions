@@ -5,4 +5,4 @@ export { updateProgrammerDeviceUIDs } from './update-programmer-deviceUIDs.js';
 export { getProgrammerDeviceUIDs } from './get-programmer-deviceUIDs.js';
 export { isProgrammerDevice } from './is-programmer-device.js';
 export { addUser } from './add-user.js';
-export * from './githubAnalytics.js';
+export * from './githubAnalytics/index.js';

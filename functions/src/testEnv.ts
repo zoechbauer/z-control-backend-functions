@@ -10,8 +10,8 @@
  * This script prints the value of GITHUB_TOKEN to verify correct loading.
  */
 
-import * as dotenv from 'dotenv';
-import * as path from 'node:path';
+import dotenv from 'dotenv';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
