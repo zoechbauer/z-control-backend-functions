@@ -1,4 +1,3 @@
-import { database } from 'firebase-admin';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const runGitHubAnalyticsFetchMock = vi.fn();

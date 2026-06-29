@@ -1,6 +1,6 @@
 # TODO List: Open Activities
 
-This document tracks open activities and follow-up tasks for the **z-control Backend Functions** project. It is used to coordinate ongoing backend work, keep priorities visible, and ensure important tasks are completed. [web:12][web:15]
+This document tracks open activities and follow-up tasks for the **z-control Backend Functions** project. It is used to coordinate ongoing backend work, keep priorities visible, and ensure important tasks are completed.
 
 ## Open tasks
 
@@ -9,12 +9,7 @@ This document tracks open activities and follow-up tasks for the **z-control Bac
 - [x] Add a Change Log file to document all changes and updates in a structured format.
 - [x] Fix the remaining 8 of 172 unit test errors. 
         Reason: I removed the console log in the function, but the tests were still expecting it to be called.
-- [ ] Add unit tests for the GitHub Analytics functions.
 - [ ] Activate lint errors in the lint configuration and fix the remaining issues.
 - [ ] Improve the folder structure of the backend functions project.
-
-## Notes
-
-- Tasks should stay focused on backend work only.
-- Completed items can be changed from `- [ ]` to `- [x]`.
-- If needed, add short notes or links below each task for implementation details. [web:12][web:18][web:21]
+- [x]   Refactor GitHub Analytics functions.
+- [x]   Add unit tests for the GitHub Analytics functions.
