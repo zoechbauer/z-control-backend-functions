@@ -48,12 +48,12 @@ export const secureTranslate = onCall(
       const collection = FireStoreConstants.getCollectionByAppId(appId);
       await FirebaseFirestoreUtilsService.validateContingentOrThrow(
         collection,
-        auth!.uid,
+        auth.uid,
       );
 
       const firestoreService = new FirebaseFirestoreService(
         collection,
-        auth!.uid,
+        auth.uid,
       );
       await firestoreService.addTranslatedChars(
         text.length * selectedLanguages.length,
@@ -78,6 +78,10 @@ export const secureTranslate = onCall(
 /**
  * Validates the request for secureTranslate Cloud Function.
  * Throws HttpsError if validation fails.
+ * @param { any } auth - Authentication information.
+ * @param { string } text - Input text for translation.
+ * @param { string } baseLang - Base language code.
+ * @param { string[] } selectedLanguages - Array of target language codes.
  */
 async function validateSecureTranslateRequest(
   auth: any,
@@ -100,6 +104,10 @@ async function validateSecureTranslateRequest(
 
 /**
  * Calls Google Translate API and returns translations or throws on error.
+ * @param { string } text - Input text for translation.
+ * @param { string } baseLang - Base language code.
+ * @param { string[] } selectedLanguages - Array of target language codes.
+ * @return { Promise<TranslationResult> } - Result of the translation.
  */
 async function translateTextOrThrow(
   text: string,

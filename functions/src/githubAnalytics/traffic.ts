@@ -79,10 +79,10 @@ export const fetchTraffic = async (
 
 /**
  * Processes a GitHub repository by fetching its traffic data and optionally updating Firestore.
- * @param owner - Repository owner (GitHub username).
- * @param repo - Repository name.
- * @param updateTraffic - If `true`, updates the Firestore collection with the latest traffic data.
- * @param isLogging - If `true`, logs detailed information for debugging.
+ * @param { string } owner - Repository owner (GitHub username).
+ * @param { string } repo - Repository name.
+ * @param { boolean } updateTraffic - If `true`, updates the Firestore collection with the latest traffic data.
+ * @param { boolean } isLogging - If `true`, logs detailed information for debugging.
  */
 export const processRepo = async (
   owner: string,

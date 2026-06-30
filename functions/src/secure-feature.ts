@@ -45,6 +45,9 @@ export const secureFeature = onCall(async (request) => {
 /**
  * Validates the request for secureFeature Cloud Function.
  * Throws HttpsError if validation fails.
+ * @param { any } auth - Authentication information.
+ * @param { string } text - Input text for the feature.
+ * @param { string } appId - Application ID.
  */
 async function validateSecureFeatureRequest(
   auth: any,
@@ -64,6 +67,8 @@ async function validateSecureFeatureRequest(
 
 /**
  * Calls a free public API (Datamuse) and returns a result based on input text.
+ * @param { string } text - Input text for the feature.
+ * @return { Promise<FeatureResult> } - Result of the feature.
  */
 async function executeFunctionApiOrThrow(text: string): Promise<FeatureResult> {
   const url = `https://api.datamuse.com/words?ml=${encodeURIComponent(text)}&max=5`;

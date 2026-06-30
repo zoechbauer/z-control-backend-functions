@@ -5,18 +5,28 @@ import {
   FirestoreContingentData,
 } from './shared/firebase-firestore.interfaces.js';
 
+/**
+ * Utility service for handling Firestore contingent data and validation.
+ * This service provides methods to check if a user's contingent limits are exceeded,
+ * normalize contingent data, and validate contingent data for both translation and feature usage.
+ * It interacts with the FirebaseFirestoreService to read and manage contingent data in Firestore.
+ */
 export class FirebaseFirestoreUtilsService {
   private readonly firestoreService: FirebaseFirestoreService;
 
+  /**
+   * Creates a new FirebaseFirestoreUtilsService instance.
+   * @param {FirebaseFirestoreService} firestoreService The FirebaseFirestoreService instance to use
+   */
   constructor(firestoreService: FirebaseFirestoreService) {
     this.firestoreService = firestoreService;
   }
 
   /**
  * Checks whether translation contingent limits are exceeded for a user.
- * @param flags The contingent data flags
- * @param userId The user ID to check
- * @return A promise that resolves to true if the contingent is exceeded, false otherwise
+ * @param {ContingentData} flags The contingent data flags
+ * @param {string} userId The user ID to check
+ * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded, false otherwise
  */
   async isContingentExceeded(
     flags: ContingentData,
@@ -39,9 +49,9 @@ export class FirebaseFirestoreUtilsService {
 
   /**
    * Checks whether the contingent for a specific user is exceeded.
-   * @param flags The contingent data flags
-   * @param userId The user ID to check
-   * @return A promise that resolves to true if the contingent is exceeded, false otherwise
+   * @param {ContingentData} flags The contingent data flags
+   * @param {string} userId The user ID to check
+   * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded, false otherwise
    */
   private async isContingentForUserExceeded(
     flags: ContingentData,
@@ -57,8 +67,8 @@ export class FirebaseFirestoreUtilsService {
 
   /**
    * Checks whether the total contingent for all users is exceeded.
-   * @param flags The contingent data flags
-   * @return A promise that resolves to true if the total contingent is exceeded, false otherwise
+   * @param {ContingentData} flags The contingent data flags
+   * @return {Promise<boolean>} A promise that resolves to true if the total contingent is exceeded, false otherwise
    */
   private async isTotalContingentExceeded(
     flags: ContingentData,
@@ -74,9 +84,9 @@ export class FirebaseFirestoreUtilsService {
 
   /**
    * Validates the contingent for the user and throws if exceeded or not found.
-   * @param collection The Firestore collection name
-   * @param userId The user ID to validate
-   * @return A promise that resolves if the contingent is valid, or throws an error if exceeded
+   * @param {string} collection The Firestore collection name
+   * @param {string} userId The user ID to validate
+   * @return {Promise<void>} A promise that resolves if the contingent is valid, or throws an error if exceeded
    */
   static async validateContingentOrThrow(
     collection: string,
@@ -108,10 +118,10 @@ export class FirebaseFirestoreUtilsService {
 
   /**
  * Validates the feature contingent for the user and throws if exceeded or not found.
- * @param collection The Firestore collection name
- * @param userId The user ID to validate
- * @return A promise that resolves if the feature contingent is valid, or throws an error if exceeded
- */
+   * @param {string} collection The Firestore collection name
+   * @param {string} userId The user ID to validate
+   * @return {Promise<void>} A promise that resolves if the feature contingent is valid, or throws an error if exceeded
+   */
   static async validateFeatureContingentOrThrow(
     collection: string,
     userId: string,
@@ -142,8 +152,8 @@ export class FirebaseFirestoreUtilsService {
 
   /**
    * Normalizes contingent data to a unified format.
-   * @param flags The contingent data to normalize.
-   * @return The normalized contingent data.
+   * @param {FeatureContingentData | FirestoreContingentData} flags The contingent data to normalize.
+   * @return {ContingentData} The normalized contingent data.
    */
   private static normalizeContingentData(
     flags: FeatureContingentData | FirestoreContingentData,
@@ -179,10 +189,10 @@ export class FirebaseFirestoreUtilsService {
 
   /**
  * Performs a deep equality check between two objects.
- * @param obj1 The first object to compare
- * @param obj2 The second object to compare
- * @return True if the objects are deeply equal, false otherwise
- */
+   * @param {any} obj1 The first object to compare
+   * @param {any} obj2 The second object to compare
+   * @return {boolean} True if the objects are deeply equal, false otherwise
+   */
   static isDeepEqual(obj1: any, obj2: any): boolean {
     if (obj1 === obj2) return true;
     if (obj1 == null || obj2 == null) return false;

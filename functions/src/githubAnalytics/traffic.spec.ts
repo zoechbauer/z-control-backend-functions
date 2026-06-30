@@ -171,7 +171,7 @@ describe('processRepo', () => {
 
     await mod.processRepo('zoechbauer', 'z-control-ionic-setup', true);
 
-    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
     expect(saveGithubAnalyticsTrafficHistoryMock).not.toHaveBeenCalled();
     expect(loggerErrorMock).toHaveBeenCalledWith(
       'Error fetching analytics for z-control-ionic-setup:',

@@ -4,6 +4,12 @@ vi.mock('firebase-functions/v2/https', () => ({
   onCall: vi.fn((_opts: any, handler: any) => handler),
   HttpsError: class HttpsError extends Error {
     code: string;
+
+    /**
+     * Creates a new HttpsError instance.
+     * @param {string} code The error code.
+     * @param {string} message The error message.
+     */
     constructor(code: string, message: string) {
       super(message);
       this.code = code;
@@ -253,18 +259,6 @@ describe('secureTranslate', () => {
       // Prevent .env.local from repopulating the key during module import
       vi.doMock('dotenv', () => ({
         default: { config: vi.fn() },
-      }));
-
-      vi.doMock('firebase-functions/v2/https', () => ({
-        onCall: vi.fn((_opts: any, handler: any) => handler),
-        HttpsError: class HttpsError extends Error {
-          code: string;
-          constructor(code: string, message: string) {
-            super(message);
-            this.code = code;
-            this.name = 'HttpsError';
-          }
-        },
       }));
 
       vi.doMock('firebase-functions/params', () => ({

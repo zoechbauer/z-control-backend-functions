@@ -13,3 +13,4 @@ This document tracks open activities and follow-up tasks for the **z-control Bac
 - [ ] Improve the folder structure of the backend functions project.
 - [x]   Refactor GitHub Analytics functions.
 - [x]   Add unit tests for the GitHub Analytics functions.
+- [x]   Add missing function documentation and activate valid-jsdoc and require-jsdoc in .eslintrc.cjs

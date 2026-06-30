@@ -6,6 +6,12 @@ vi.mock('firebase-functions/v2/https', () => ({
   ),
   HttpsError: class HttpsError extends Error {
     code: string;
+
+    /**
+     * Creates a new HttpsError instance.
+     * @param {string} code The error code.
+     * @param {string} message The error message.
+     */
     constructor(code: string, message: string) {
       super(message);
       this.code = code;
