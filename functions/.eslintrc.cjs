@@ -44,7 +44,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 0, // <-- deactivated: any warnings
     'no-invalid-this': 0, // <-- deactivated: 'this' in tests
     '@typescript-eslint/no-non-null-assertion': 0, // <-- deactivated: non-null !
-    'func-call-spacing': 0, // <-- deactivated: function call spacing
     'no-unexpected-multiline': 0, // <-- deactivated: unexpected multiline
     '@typescript-eslint/no-unused-vars': 0, // <-- deactivated: unused variables
   },

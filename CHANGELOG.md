@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.2] - YYYY-MM-DD
+
+### Added
+
+- Added missing JSDoc comments to all functions in the backend functions project to improve code documentation and maintainability.
+- Removed spaces between function names and parentheses in function calls to adhere to standard JavaScript formatting conventions and improve code readability.
+
 ## [2.1] - 2026-06-29
 
 ### Added

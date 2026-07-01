@@ -78,8 +78,7 @@ describe('createMissingContingentData', () => {
     { featureType: undefined },
     { featureType: FeatureType.Feature },
     { featureType: FeatureType.MLT },
-  ])
-  (`should not throw invalid-argument HttpsError if correct feature type [$featureType] is provided`, async ({ featureType }) => {
+  ])(`should not throw invalid-argument HttpsError if correct feature type [$featureType] is provided`, async ({ featureType }) => {
     const request = makeRequest('user1', appId, featureType);
     const call = (createMissingContingentData as any)(request);
     const expected = {
