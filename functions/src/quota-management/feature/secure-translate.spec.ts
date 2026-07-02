@@ -30,20 +30,20 @@ vi.mock('firebase-admin', () => ({
   },
 }));
 
-vi.mock('./firebase-firestore.service.js', () => ({
+vi.mock('../services/firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
 
-vi.mock('./firebase-firestore-utils.service.js', () => ({
+vi.mock('../services/firebase-firestore-utils.service.js', () => ({
   FirebaseFirestoreUtilsService: {
     validateContingentOrThrow: vi.fn(),
   },
 }));
 
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
 import { secureTranslate } from './secure-translate.js';
-import { SecureTranslateData } from './shared/firebase-firestore.interfaces.js';
+import { SecureTranslateData } from '../../shared/firebase-firestore.interfaces.js';
 
 describe('secureTranslate', () => {
   const COLLECTION = 'MLT_translations_statistics';

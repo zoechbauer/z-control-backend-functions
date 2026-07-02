@@ -1,8 +1,8 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { FireStoreConstants } from './shared/app.constants.js';
-import { getErrorMsg } from './utils.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FireStoreConstants } from '../../shared/app.constants.js';
+import { getErrorMsg } from '../services/utils.js';
 
 /**
  * Callable function returning whether the current device is a programmer device.

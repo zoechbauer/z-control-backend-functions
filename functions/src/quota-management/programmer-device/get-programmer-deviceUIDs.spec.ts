@@ -19,12 +19,12 @@ vi.mock('firebase-functions/v2/https', () => ({
   },
 }));
 
-vi.mock('./firebase-firestore.service.js', () => ({
+vi.mock('../services/firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
 
 import { getProgrammerDeviceUIDs } from './get-programmer-deviceUIDs.js';
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
 
 describe('getProgrammerDeviceUIDs', () => {
   const appId = 'ionic_setup';
@@ -34,7 +34,7 @@ describe('getProgrammerDeviceUIDs', () => {
   });
 
   beforeEach(() => {
-    vi.mocked(FirebaseFirestoreService).mockReset();
+    vi.clearAllMocks();
   });
 
   it('should throw unauthenticated HttpsError if request has no auth', async () => {

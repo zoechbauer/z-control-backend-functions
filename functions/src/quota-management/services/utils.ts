@@ -1,5 +1,5 @@
-import { UserType } from './shared/app.constants.js';
-import { ProgrammerDeviceUID } from './shared/firebase-firestore.interfaces.js';
+import { UserType } from '../../shared/app.constants.js';
+import { ProgrammerDeviceUID } from '../../shared/firebase-firestore.interfaces.js';
 
 /**
  * Extracts a readable error message from an error object or string.

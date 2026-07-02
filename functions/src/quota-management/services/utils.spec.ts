@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { UserType } from './shared/app.constants.js';
+import { UserType } from '../../shared/app.constants.js';
 import {
   getErrorMsg,
   getDeviceName,

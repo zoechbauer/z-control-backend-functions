@@ -1,7 +1,7 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { getErrorMsg } from './utils.js';
-import { FeatureType, FireStoreConstants } from './shared/app.constants.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { getErrorMsg } from '../services/utils.js';
+import { FeatureType, FireStoreConstants } from '../../shared/app.constants.js';
 
 /**
  * Callable function to ensure the contingent data document exists for the current month.

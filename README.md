@@ -53,7 +53,10 @@ z-control-backend-functions/
 │   ├── src/                  # Source code
 │   │   ├── learning-vitest/  # Vitest learning resources
 │   │   ├── shared/           # Shared backend utilities
-│   │   └── *.ts              # Function implementation files
+│   │   ├── github-analytics/ # GitHub Analytics functions
+│   │   ├── quota-management/ # Quota management functions
+│   │   ├── loadEnv.js        # Environment variable loader
+│   │   └── index.ts          # exports for all functions
 │   ├── tsconfig.json         # TypeScript config
 │   ├── tsconfig.dev.json     # TypeScript dev config
 │   ├── vitest.config.ts      # Vitest config

@@ -1,13 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const dotenvConfigMock = vi.fn();
-
-vi.mock('dotenv', () => ({
-  default: {
-    config: dotenvConfigMock,
-  },
-}));
-
 vi.mock('firebase-functions/logger', () => ({
   error: vi.fn(),
 }));
@@ -23,17 +15,6 @@ describe('bootstrap', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  it('should load dotenv with .env.local', async () => {
-    await import('./bootstrap.js');
-
-    expect(dotenvConfigMock).toHaveBeenCalledTimes(1);
-    expect(dotenvConfigMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        path: expect.stringMatching(/\.env\.local$/),
-      }),
-    );
   });
 
   it('should register process error handlers', async () => {

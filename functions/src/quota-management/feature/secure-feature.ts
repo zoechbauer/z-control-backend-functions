@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
-import { FeatureResult } from './shared/firebase-firestore.interfaces.js';
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { FireStoreConstants } from './shared/app.constants.js';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FeatureResult } from '../../shared/firebase-firestore.interfaces.js';
+import { FireStoreConstants } from '../../shared/app.constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

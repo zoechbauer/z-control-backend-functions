@@ -19,13 +19,13 @@ vi.mock('firebase-functions/v2/https', () => ({
   },
 }));
 
-vi.mock('./firebase-firestore.service.js', () => ({
+vi.mock('../services/firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
 
 import { createMissingContingentData } from './create-missing-contingent-data.js';
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { FeatureType } from './shared/app.constants.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FeatureType } from '../../shared/app.constants.js';
 
 describe('createMissingContingentData', () => {
   const appId = 'ionic_setup';

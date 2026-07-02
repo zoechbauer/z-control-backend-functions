@@ -32,20 +32,21 @@ vi.mock('firebase-admin', () => ({
   },
 }));
 
-vi.mock('./firebase-firestore.service.js', () => ({
+vi.mock('../services/firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
 
-vi.mock('./firebase-firestore-utils.service.js', () => ({
+vi.mock('../services/firebase-firestore-utils.service.js', () => ({
   FirebaseFirestoreUtilsService: {
     validateFeatureContingentOrThrow: vi.fn(),
   },
 }));
 
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
-import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
+// fix imports
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
 import { secureFeature } from './secure-feature.js';
-import { SecureFeatureData } from './shared/firebase-firestore.interfaces.js';
+import { SecureFeatureData } from '../../shared/firebase-firestore.interfaces.js';
 
 describe('secureFeature', () => {
   const COLLECTION = 'ZC_ionic_setup';

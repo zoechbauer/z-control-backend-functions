@@ -1,11 +1,11 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { FireStoreConstants, UserType } from './shared/app.constants.js';
+import { FireStoreConstants, UserType } from '../../shared/app.constants.js';
 import {
   DeviceInfo,
   FeatureContingentData,
   FirestoreContingentData,
   ProgrammerDeviceUID,
-} from './shared/firebase-firestore.interfaces.js';
+} from '../../shared/firebase-firestore.interfaces.js';
 
 describe('FirebaseFirestoreService', () => {
   let FirebaseFirestoreService: any;

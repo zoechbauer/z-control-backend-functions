@@ -19,12 +19,12 @@ vi.mock('firebase-functions/v2/https', () => ({
   },
 }));
 
-vi.mock('./firebase-firestore.service.js', () => ({
+vi.mock('../services/firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
 
 import { updateProgrammerDeviceUIDs } from './update-programmer-deviceUIDs.js';
-import { FirebaseFirestoreService } from './firebase-firestore.service.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
 
 describe('updateProgrammerDeviceUIDs', () => {
   const appId = 'ionic_setup';

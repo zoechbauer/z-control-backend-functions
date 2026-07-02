@@ -1,13 +1,13 @@
-import { db } from './shared/firebase-admin.js';
+import { db } from '../../shared/firebase-admin.js';
 import { FieldValue } from 'firebase-admin/firestore';
-import { FireStoreConstants, UserType } from './shared/app.constants.js';
+import { FireStoreConstants, UserType } from '../../shared/app.constants.js';
 import {
   CharCountAndTargetLangsResult,
   DeviceInfo,
   FeatureContingentData,
   FirestoreContingentData,
   ProgrammerDeviceUID,
-} from './shared/firebase-firestore.interfaces.js';
+} from '../../shared/firebase-firestore.interfaces.js';
 import { getDeviceName, getUserType, isValidDevice } from './utils.js';
 import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
 

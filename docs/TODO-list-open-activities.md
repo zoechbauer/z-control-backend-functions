@@ -9,9 +9,9 @@ This document tracks open activities and follow-up tasks for the **z-control Bac
 - [x] Add a Change Log file to document all changes and updates in a structured format.
 - [x] Fix the remaining 8 of 172 unit test errors. 
         Reason: I removed the console log in the function, but the tests were still expecting it to be called.
-- [ ] Activate lint errors in the lint configuration and fix the remaining issues.
-- [ ] Improve the folder structure of the backend functions project.
+- [x] Improve the folder structure of the backend functions project.
 - [x]   Refactor GitHub Analytics functions.
 - [x]   Add unit tests for the GitHub Analytics functions.
+- [ ] Activate lint errors in the lint configuration and fix the remaining issues.
 - [x]   Add missing function documentation and activate valid-jsdoc and require-jsdoc in .eslintrc.cjs
 - [x]   Removed spaces between function names and parentheses in function calls

@@ -10,7 +10,7 @@ import {
   ContingentData,
   FeatureContingentData,
   FirestoreContingentData,
-} from './shared/firebase-firestore.interfaces.js';
+} from '../../shared/firebase-firestore.interfaces.js';
 import { FirebaseFirestoreService } from './firebase-firestore.service.js';
 
 describe('FirebaseFirestoreUtilsService.isDeepEqual', () => {

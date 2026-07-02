@@ -3,7 +3,7 @@ import {
   ContingentData,
   FeatureContingentData,
   FirestoreContingentData,
-} from './shared/firebase-firestore.interfaces.js';
+} from '../../shared/firebase-firestore.interfaces.js';
 
 /**
  * Utility service for handling Firestore contingent data and validation.
