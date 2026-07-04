@@ -60,13 +60,36 @@ npm install node-fetch dotenv
 
 ### 3. Update Function Code to Load `.env.local`
 
-At the top of your function file (e.g., `githubAnalytics.ts`):
+Note: `loadEnv.ts` is needed **for local testing with the Firebase Emulator Suite**. It loads environment variables from `.env.local` when running in the emulator. **For production**, the GitHub token must be set as an environment variable in the Firebase Console (done in this repo), or as a secret in the Firebase Functions configuration (done in `z-control Translator` app).
+
+in src/loadEnv.ts:
 
 ```typescript
-import * as dotenv from "dotenv";
-import * as path from "node:path";
-dotenv.config({ path: path.resolve(__dirname, "../../.env.local") });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load dotenv for local test with firebase emulators
+// GITHUB_TOKEN for production must be defined as environment variable in https://console.cloud.google.com/
+const runningInEmulator = Boolean(process.env.FUNCTIONS_EMULATOR) || Boolean(process.env.FIREBASE_EMULATOR_HOST) || Boolean(process.env.FIREBASE_EMULATOR_HUB_HOST) || process.env.NODE_ENV === "development";
+
+const envPath = path.resolve(__dirname, "../../.env.local");
+
+if (runningInEmulator) {
+  console.log("loadEnv: runningInEmulator=true");
+  console.log("loadEnv: NODE_ENV=", process.env.NODE_ENV ?? "(undefined)");
+  console.log("loadEnv: envPath=", envPath);
+  console.log("loadEnv: env exists=", fs.existsSync(envPath));
+}
+
+// Guard to avoid double-loading
+if (!process.env.GITHUB_TOKEN && !process.env.__ENV_LOADED && runningInEmulator && fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+  process.env.__ENV_LOADED = "1";
+  console.log("loadEnv: loaded .env.local");
+}
 ```
+
+Verify the GitHub token is loaded by running `src/github-analytics/tools/testEnv.ts`. The script prints the environment variables and confirms that `GITHUB_TOKEN` is set. See the comments in `testEnv.ts` for run instructions.
 
 ### 4. Build Functions
 
@@ -132,7 +155,10 @@ firebase emulators:start
 - **Internal Server Error:** Check logs for missing environment variables or API errors.
 - **No Data in Emulator UI:** Ensure Firestore writes use `new Date().toISOString()` for timestamps.
 - **Port Conflicts:** Use `netstat -ano | findstr :8080` and `taskkill /PID <PID> /F` to free ports.
-- **Environment Variables Not Loaded:** Check `.env.local` formatting and encoding (UTF-8, LF).
+- **Environment variables not loaded:**
+  - Verify that `.env.local` exists and contains the required variables.
+  - Ensure the file is saved with UTF-8 encoding and LF line endings.
+  - Run `testEnv.ts` in `src/github-analytics/tools` to confirm variables load correctly (see comments in that file for details).
 
 ---
 

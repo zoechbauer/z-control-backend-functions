@@ -1,0 +1,148 @@
+import { onCall, CallableRequest, HttpsError } from 'firebase-functions/v2/https';
+import { defineSecret } from 'firebase-functions/params';
+import dotenv from 'dotenv';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
+import {
+  SecureTranslateData,
+  TranslationResult,
+} from '../../shared/firebase-firestore.interfaces.js';
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FireStoreConstants } from '../../shared/app.constants.js';
+import { GoogleTranslateResponse } from '../../shared/google-translate.interfaces.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
+
+const GOOGLE_TRANSLATE_API_KEY = defineSecret('GOOGLE_TRANSLATE_API_KEY');
+
+/**
+ * Callable function that validates input, enforces contingent limits, updates usage,
+ * and returns translations from the Google Translate API.
+ */
+export const secureTranslate = onCall(
+  { secrets: [GOOGLE_TRANSLATE_API_KEY] },
+  async (request: CallableRequest) => {
+    const { data, auth } = request;
+    if (!auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated.');
+    }
+
+    const { appId, text, baseLang, selectedLanguages } =
+      data as SecureTranslateData;
+
+    if (typeof appId !== 'string' || appId.trim() === '') {
+      throw new HttpsError('invalid-argument', 'appId must be provided.');
+    }
+
+    await validateSecureTranslateRequest(
+      auth,
+      text,
+      baseLang,
+      selectedLanguages,
+    );
+
+    try {
+      const collection = FireStoreConstants.getCollectionByAppId(appId);
+      await FirebaseFirestoreUtilsService.validateContingentOrThrow(
+        collection,
+        auth.uid,
+      );
+
+      const firestoreService = new FirebaseFirestoreService(
+        collection,
+        auth.uid,
+      );
+      await firestoreService.addTranslatedChars(
+        text.length * selectedLanguages.length,
+        selectedLanguages,
+      );
+
+      const translationResult = await translateTextOrThrow(
+        text,
+        baseLang,
+        selectedLanguages,
+      );
+      return translationResult;
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Error translating text.';
+      throw new HttpsError('internal', message);
+    }
+  },
+);
+
+/**
+ * Validates the request for secureTranslate Cloud Function.
+ * Throws HttpsError if validation fails.
+ * @param { CallableRequest<SecureTranslateData> } auth - Authentication information.
+ * @param { string } text - Input text for translation.
+ * @param { string } baseLang - Base language code.
+ * @param { string[] } selectedLanguages - Array of target language codes.
+ */
+async function validateSecureTranslateRequest(
+  auth: CallableRequest<SecureTranslateData>['auth'],
+  text: string,
+  baseLang: string,
+  selectedLanguages: string[],
+): Promise<void> {
+  if (!auth) {
+    throw new HttpsError('unauthenticated', 'User must be authenticated.');
+  }
+  if (
+    !text ||
+    !baseLang ||
+    !Array.isArray(selectedLanguages) ||
+    selectedLanguages.length === 0
+  ) {
+    throw new HttpsError('invalid-argument', 'Missing required parameters.');
+  }
+}
+
+/**
+ * Calls Google Translate API and returns translations or throws on error.
+ * @param { string } text - Input text for translation.
+ * @param { string } baseLang - Base language code.
+ * @param { string[] } selectedLanguages - Array of target language codes.
+ * @return { Promise<TranslationResult> } - Result of the translation.
+ */
+async function translateTextOrThrow(
+  text: string,
+  baseLang: string,
+  selectedLanguages: string[],
+): Promise<TranslationResult> {
+  const apiKey =
+    GOOGLE_TRANSLATE_API_KEY.value() || process.env.GOOGLE_TRANSLATE_API_KEY;
+  if (!apiKey) {
+    throw new HttpsError('internal', 'Google Translate API key is not set.');
+  }
+  const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+
+  const translations: Record<string, string> = {};
+  for (const target of selectedLanguages) {
+    const body = {
+      q: text,
+      source: baseLang,
+      target,
+      format: 'text',
+    };
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      throw new HttpsError(
+        'internal',
+        `Translation API error: ${response.statusText}`,
+      );
+    }
+    const respData = (await response.json()) as GoogleTranslateResponse;
+    const translated = respData.data?.translations?.[0]?.translatedText ?? '';
+    translations[target] = translated;
+  }
+  return { translations };
+}

@@ -1,11 +1,13 @@
 import { HttpsError } from 'firebase-functions/v2/https';
 
-// IMPORTANT: Do not change the path of FireStoreConstants as it is used in both the functions and the Angular apps.
+// IMPORTANT: Do not change the path of FireStoreConstants
+// as it is used in both the functions and the Angular apps.
 // BE: functions/src/shared/app.constants.ts
 // FE: src/app/shared/app.constants.ts
 
 /**
- * FireStoreConstants class provides constants and utility methods for Firestore collection paths and user mapping.
+ * FireStoreConstants class provides constants and utility methods for
+ * Firestore collection paths and user mapping.
  * These constants are used for Firestore contingent data and user mapping collections.
  * Constants for GitHub analytics collections are defined in ./GitHubConstants.ts
  */

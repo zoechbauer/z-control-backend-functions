@@ -7,6 +7,9 @@ The [docs](.) folder contains categorized guides, and best practices for develop
 - **todo-list-environment-programmer-devices.md**  
   Checklist for updating environment variables and programmer device UIDs, including required steps for Firestore user mapping updates.
 
+- **changed-folder-structure.txt**  
+  Documents the recent reorganization of the functions/src folder, and compares the previous and current layouts.
+
 - **coding-guidelines.md**  
   Clean code principles and best practices for naming, functions, error handling, formatting, and testing.
 

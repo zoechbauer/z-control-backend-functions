@@ -39,13 +39,25 @@ module.exports = {
       'after',
       { overrides: { '?': 'before', ':': 'before' } },
     ],
-    'max-len': 0, // <-- deactivated: Max length error deactivated
-    '@typescript-eslint/no-empty-function': 0, // <-- deactivated: No empty function error deactivated
-    '@typescript-eslint/no-explicit-any': 0, // <-- deactivated: any warnings
     'no-invalid-this': 0, // <-- deactivated: 'this' in tests
-    '@typescript-eslint/no-non-null-assertion': 0, // <-- deactivated: non-null !
-    'func-call-spacing': 0, // <-- deactivated: function call spacing
-    'no-unexpected-multiline': 0, // <-- deactivated: unexpected multiline
     '@typescript-eslint/no-unused-vars': 0, // <-- deactivated: unused variables
+    'max-len': [
+      'error',
+      {
+        code: 100,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
+    ],
   },
+  overrides: [
+    {
+      files: ['**/*.spec.ts', '**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+  ],
 };
