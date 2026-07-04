@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
+import { secureTranslate } from './secure-translate.js';
+import { SecureTranslateData } from '../../shared/firebase-firestore.interfaces.js';
+
 vi.mock('firebase-functions/v2/https', () => ({
   onCall: vi.fn((_opts: any, handler: any) => handler),
   HttpsError: class HttpsError extends Error {
@@ -39,11 +44,6 @@ vi.mock('../services/firebase-firestore-utils.service.js', () => ({
     validateContingentOrThrow: vi.fn(),
   },
 }));
-
-import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
-import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
-import { secureTranslate } from './secure-translate.js';
-import { SecureTranslateData } from '../../shared/firebase-firestore.interfaces.js';
 
 describe('secureTranslate', () => {
   const COLLECTION = 'MLT_translations_statistics';

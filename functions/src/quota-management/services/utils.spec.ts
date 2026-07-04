@@ -11,25 +11,35 @@ import {
 const programmerDeviceUIDs = [{ userId: 'user1', name: 'Device 1' }];
 
 describe('getErrorMsg', () => {
-  it('should return message from error object', () => {
+  it('should return message from Error object', () => {
     const error = new Error('Test error message');
     expect(getErrorMsg(error)).toBe('Test error message');
   });
 
-  it('should return message from param if no error object is provided', () => {
+  it('should return fallback message when Error has an empty message', () => {
     const error = new Error('');
-    const paramError = 'Test error message';
-    expect(getErrorMsg(error, paramError)).toBe(paramError);
+    const fallback = 'Test error message';
+    expect(getErrorMsg(error, fallback)).toBe(fallback);
   });
 
-  it('should return the error string if a string is passed', () => {
+  it('should return the error string if a non-empty string is passed', () => {
     const error = 'Simple error string';
     expect(getErrorMsg(error)).toBe(error);
   });
 
-  it('should return default message if error object has no message and no param is provided', () => {
-    const error = {};
-    expect(getErrorMsg(error)).toBe('An unknown error occurred.');
+  it('should return fallback message when an empty string is passed', () => {
+    expect(getErrorMsg('')).toBe('An unknown error occurred.');
+  });
+
+  it('should return message property of an object', () => {
+    const error = {
+      message: 'Message property in object',
+    };
+    expect(getErrorMsg(error)).toBe('Message property in object');
+  });
+
+  it('should return default message for an object without message', () => {
+    expect(getErrorMsg({})).toBe('An unknown error occurred.');
   });
 });
 

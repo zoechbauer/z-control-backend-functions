@@ -13,12 +13,17 @@ const getErrorMsg = (
   errorMessage = 'An unknown error occurred.',
 ): string => {
   if (error instanceof Error) {
-    errorMessage = error.message || errorMessage;
-  } else if (typeof error === 'string') {
-    errorMessage = error || errorMessage;
-  } else if (error && typeof error === 'object' && 'message' in error) {
-    errorMessage = (error as { message?: string }).message || errorMessage;
+    return error.message || errorMessage;
   }
+
+  if (typeof error === 'string') {
+    return error || errorMessage;
+  }
+
+  if (error && typeof error === 'object' && 'message' in error) {
+    return (error as { message?: string }).message || errorMessage;
+  }
+
   return errorMessage;
 };
 

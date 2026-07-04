@@ -1,4 +1,10 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import admin from 'firebase-admin';
+
+import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
+import { secureFeature } from './secure-feature.js';
+import { SecureFeatureData } from '../../shared/firebase-firestore.interfaces.js';
 
 vi.mock('firebase-functions/v2/https', () => ({
   onCall: vi.fn((optsOrHandler: any, maybeHandler?: any) =>
@@ -28,6 +34,7 @@ vi.mock('firebase-functions/params', () => ({
 
 vi.mock('firebase-admin', () => ({
   default: {
+    apps: [],
     initializeApp: vi.fn(),
   },
 }));
@@ -41,12 +48,6 @@ vi.mock('../services/firebase-firestore-utils.service.js', () => ({
     validateFeatureContingentOrThrow: vi.fn(),
   },
 }));
-
-// fix imports
-import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
-import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service.js';
-import { secureFeature } from './secure-feature.js';
-import { SecureFeatureData } from '../../shared/firebase-firestore.interfaces.js';
 
 describe('secureFeature', () => {
   const COLLECTION = 'ZC_ionic_setup';
@@ -80,8 +81,10 @@ describe('secureFeature', () => {
     return { addConsumedFeatureChars };
   };
 
-  beforeEach(() => {
+  beforeEach( async () => {
+    vi.resetModules();
     vi.clearAllMocks();
+    await import('./secure-feature.js');
   });
 
   describe('input validation', () => {
@@ -336,6 +339,14 @@ describe('secureFeature', () => {
         message: 'Function API error: Network error',
       });
       expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('initialization', () => {
+    it('initializes Firebase Admin SDK at module load', () => {
+      // The module has already been imported in beforeEach, so initialization
+      // should have happened once at load time.
+      expect(admin.initializeApp).toHaveBeenCalledTimes(1);
     });
   });
 });
