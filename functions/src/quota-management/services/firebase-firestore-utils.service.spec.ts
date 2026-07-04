@@ -249,7 +249,7 @@ describe('validateContingentOrThrow', () => {
   });
 
   it('logs if firestore contingent data is not found', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
 
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
@@ -339,7 +339,7 @@ describe('validateFeatureContingentOrThrow', () => {
   });
 
   it('logs if firestore contingent data is not found', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
 
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,

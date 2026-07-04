@@ -38,8 +38,8 @@ describe('getProgrammerDeviceUIDs', () => {
   });
 
   it('should throw unauthenticated HttpsError if request has no auth', async () => {
-    const request = makeRequest(); // { auth: undefined }
-    const call = (getProgrammerDeviceUIDs as any)(request); // invoke the raw handler → returns a Promise
+    const request = makeRequest(); // .{ auth: undefined }
+    const call = (getProgrammerDeviceUIDs as any)(request); // invoke raw handler → returns Promise
     const expected = {
       code: 'unauthenticated',
       message: 'User must be authenticated.',

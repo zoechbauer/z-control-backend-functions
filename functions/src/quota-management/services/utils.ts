@@ -4,17 +4,20 @@ import { ProgrammerDeviceUID } from '../../shared/firebase-firestore.interfaces.
 /**
  * Extracts a readable error message from an error object or string.
  * @param {any} error The error object or string.
- * @param {string} [errorMessage='An unknown error occurred.'] The default error message to return if no specific message is found.
+ * @param {string} [errorMessage='An unknown error occurred.'] The default error message to return
+ *        if no specific message is found.
  * @return {string} The extracted error message.
  */
 const getErrorMsg = (
-  error: any,
+  error: unknown,
   errorMessage = 'An unknown error occurred.',
 ): string => {
-  if (error && typeof error === 'object' && 'message' in error) {
+  if (error instanceof Error) {
     errorMessage = error.message || errorMessage;
   } else if (typeof error === 'string') {
-    errorMessage = error;
+    errorMessage = error || errorMessage;
+  } else if (error && typeof error === 'object' && 'message' in error) {
+    errorMessage = (error as { message?: string }).message || errorMessage;
   }
   return errorMessage;
 };

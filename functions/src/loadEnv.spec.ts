@@ -34,7 +34,7 @@ describe('loadEnv', () => {
   });
 
   it('should log infos to console', async () => {
-    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
     // Set a test values
     // process.env.GITHUB_TOKEN = 'test_token_value';
     process.env.FUNCTIONS_EMULATOR = 'true';

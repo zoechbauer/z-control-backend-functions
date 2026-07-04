@@ -12,7 +12,8 @@ import { getDeviceName, getUserType, isValidDevice } from './utils.js';
 import { FirebaseFirestoreUtilsService } from './firebase-firestore-utils.service.js';
 
 /**
- * Service for interacting with Firebase Firestore, specifically for managing user and feature contingent data.
+ * Service for interacting with Firebase Firestore,
+ * specifically for managing user and feature contingent data.
  */
 export class FirebaseFirestoreService {
   private readonly db = db;
@@ -30,9 +31,10 @@ export class FirebaseFirestoreService {
   }
 
   /**
-   * Reads the MLT contingent data document containing global feature limits and control flags.
+   * Reads the translation (MLT) contingent data document
+   * containing global feature limits and control flags.
    *
-   * @return {Promise<FirestoreContingentData>} Promise resolving to the contingent data object with MLT quotas and control flags.
+   * @return {Promise<FirestoreContingentData>} Promise with MLT quotas and control flags.
    * @throws {Error} If the document read operation fails.
    */
   async readContingentData(): Promise<FirestoreContingentData> {
@@ -47,7 +49,7 @@ export class FirebaseFirestoreService {
   /**
    * Reads the feature contingent data document containing global feature limits and control flags.
    *
-   * @return {Promise<FeatureContingentData>} Promise resolving to the feature contingent data object with feature quotas and control flags.
+   * @return {Promise<FeatureContingentData>} Promise with feature quotas and control flags.
    * @throws {Error} If the document read operation fails.
    */
   async readFeatureContingentData(): Promise<FeatureContingentData> {
@@ -65,7 +67,7 @@ export class FirebaseFirestoreService {
    * Returns the user's cumulative translated character count and their selected target languages
    * for translations. If the user document doesn't exist or lacks character count data, returns 0.
    *
-   * @return {Promise<CharCountAndTargetLangsResult>} Promise resolving to an object with charCount and targetLanguages array.
+   * @return {Promise<CharCountAndTargetLangsResult>} Promise with charCount and targetLanguages.
    * @throws {Error} If the document read operation fails.
    */
   async getCharCountAndTargetLangsForUser(): Promise<CharCountAndTargetLangsResult> {
@@ -74,7 +76,7 @@ export class FirebaseFirestoreService {
       .get();
     return doc.exists && doc.data()?.charCount
       ? {
-        charCount: doc.data()!.charCount,
+        charCount: doc.data()?.charCount,
         targetLanguages: doc.data()?.targetLanguages || [],
       }
       : { charCount: 0, targetLanguages: [] };
@@ -95,16 +97,17 @@ export class FirebaseFirestoreService {
         `${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`,
       )
       .get();
-    return doc.exists && doc.data()?.charCount ? doc.data()!.charCount : 0;
+    return doc.exists && doc.data()?.charCount ? doc.data()?.charCount : 0;
   }
 
   /**
-   * Retrieves the total consumed feature/MLT character count across all users for the current month.
+   * Retrieves the total consumed feature/MLT character count across all users for the current
+   * month.
    *
    * Reads the meta document that tracks cumulative feature/MLT usage. Used for monitoring
    * global quotas and enforcing rate limits.
    *
-   * @return {Promise<number>} Promise resolving to the total character count as a number, or 0 if not found.
+   * @return {Promise<number>} Promise with total character count as a number, or 0 if not found.
    * @throws {Error} If the document read operation fails.
    */
   async getTotalCharCount(): Promise<number> {
@@ -114,7 +117,7 @@ export class FirebaseFirestoreService {
           `${FireStoreConstants.getMetaTotalCharsDocumentPath(this.collection)}`,
         )
         .get();
-      return doc.exists && doc.data()?.charCount ? doc.data()!.charCount : 0;
+      return doc.exists && doc.data()?.charCount ? doc.data()?.charCount : 0;
     } catch (error) {
       console.error('Error getting total char count:', error);
       throw error;
@@ -154,7 +157,8 @@ export class FirebaseFirestoreService {
   /**
    * Creates the contingent data document with default values if it doesn't exist.
    * Existing values are never overwritten.
-   * @param {FirestoreContingentData | FeatureContingentData} contingentData The contingent data to create.
+   * @param {FirestoreContingentData | FeatureContingentData} contingentData The contingent data
+   *         to create.
    * @return {Promise<void>} A promise that resolves when the operation is complete.
    * @throws {Error} If the document creation operation fails.
    */
@@ -193,8 +197,9 @@ export class FirebaseFirestoreService {
    * **Behavior:**
    * For each device in the provided array:
    *   - Creates a document in `programmerDevices` collection if it doesn't exist
-   *   - Updates the `users` mapping: if a user mapping exists with type 'User', updates to 'Programmer'
-   *   - If no user mapping exists, creates a new one as 'Programmer'
+   *   - Updates the `users` mapping:
+   *        if a user mapping exists with type 'User', updates to 'Programmer'
+   *        if no user mapping exists, creates a new one as 'Programmer'
    *   - Skips devices with missing userId or name
    *
    * **Important:**
@@ -206,7 +211,8 @@ export class FirebaseFirestoreService {
    * - User mappings: `{collection}/userMapping/users/{userId}`
    * - Programmer devices: `{collection}/userMapping/programmerDevices/{userId}`
    *
-   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device objects from client (.env.local).
+   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device objects
+   *        from client (.env.local).
    * @return {Promise<void>} Promise that resolves when all device updates are complete.
    * @throws {TypeError} If programmerDeviceUIDs is not an array.
    * @throws {Error} Is caught and logged for individual device update failures.
@@ -244,7 +250,8 @@ export class FirebaseFirestoreService {
   /**
  * Updates or creates a user mapping document for a single programmer device.
    * Internal helper for updateProgrammerDeviceUIDs.
-   * @param {ProgrammerDeviceUID} device - Programmer device object containing userId and device name.
+   * @param {ProgrammerDeviceUID} device - Programmer device object
+   *        containing userId and device name.
    * @param {ProgrammerDeviceUID[]} allDevices - Array of all programmer device objects.
    * @return {Promise<void>} A promise that resolves when the operation is complete.
    * @throws {Error} If the Firestore write operation fails.
@@ -298,8 +305,10 @@ export class FirebaseFirestoreService {
    *
    * Path: {collection}/userMapping/programmerDevices/{userId}
    *
-   * @param {ProgrammerDeviceUID} device - Programmer device object containing userId and device name.
-   * @return {Promise<void>} A promise that resolves when the document is created or confirmed to exist.
+   * @param {ProgrammerDeviceUID} device - Programmer device object
+   *         containing userId and device name.
+   * @return {Promise<void>} A promise that resolves
+   *          when the document is created or confirmed to exist.
    * @throws {Error} If the Firestore write operation fails.
    *
    * @example
@@ -340,7 +349,8 @@ export class FirebaseFirestoreService {
    *
    * Path: {collection}/userMapping/programmerDevices/*
    *
-   * @return {Promise<ProgrammerDeviceUID[]>} Promise resolving to array of all programmer device UIDs stored in Firestore.
+   * @return {Promise<ProgrammerDeviceUID[]>} Promise resolving to array
+   *          of all programmer device UIDs stored in Firestore.
    *          Returns empty array if the collection is empty or doesn't exist.
    * @throws {Error} If the Firestore read operation fails.
    *
@@ -371,7 +381,7 @@ export class FirebaseFirestoreService {
 
   /**
    * Checks if the current device is a programmer device.
-   * @return {Promise<boolean>} Promise resolving to true if the device is a programmer device, false otherwise.
+   * @return {Promise<boolean>} Promise: true if the device is a programmer device, false otherwise.
    */
   async isProgrammerDevice(): Promise<boolean> {
     try {
@@ -399,7 +409,8 @@ export class FirebaseFirestoreService {
   /**
    * Logs the creation of a new device mapping document.
    * Internal helper for debugging device mapping lifecycle.
-   * @param {ProgrammerDeviceUID} device - The programmer device object containing userId and device name.
+   * @param {ProgrammerDeviceUID} device - The programmer device object
+   *         containing userId and device name.
    */
   private logCreatingDevice(device: ProgrammerDeviceUID): void {
     console.log(
@@ -416,9 +427,12 @@ export class FirebaseFirestoreService {
    * Uses deep equality comparison with locale-aware sorting to detect actual content changes.
    *
    * @param {string} userId The unique identifier of the user (required).
-   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device UIDs to determine user type and device name.
-   * @param {DeviceInfo} deviceInfo Device information object (userAgent, platform, language, appVersion) to store.
-   * @param {boolean} [isNative] Optional flag indicating if user is on a native platform (default: false).
+   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device UIDs
+   *         to determine user type and device name.
+   * @param {DeviceInfo} deviceInfo Device information object
+   *         (userAgent, platform, language, appVersion) to store.
+   * @param {boolean} [isNative] Optional flag indicating if user is on a native platform
+   *         (default: false).
    * @return {Promise<void>} A promise that resolves when the user document is created or updated.
    * @throws {Error} If userId is not provided, or if the write operation fails.
    */
@@ -477,7 +491,8 @@ export class FirebaseFirestoreService {
    * Format: '{userType}-{sequenceNumber}' (e.g., 'User-42', 'Programmer-5').
    * Internal helper for creating consistent user identifiers.
    * @param {string} userId The unique identifier of the user.
-   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device UIDs to determine user type.
+   * @param {ProgrammerDeviceUID[]} programmerDeviceUIDs Array of programmer device UIDs
+   *         to determine user type.
    * @return {Promise<string>} A promise that resolves to the generated user name.
    */
   private async getUserName(
@@ -511,15 +526,17 @@ export class FirebaseFirestoreService {
   }
 
   /**
-   * Increments the translated character count for the current user, used by secureTranslate feature.
-   * Also updates the lastUpdated timestamp for both the user and the total statistics document and the selected languages.
+   * Increments the translated character count for the current user,
+   * used by secureTranslate feature.
+   * Also updates the lastUpdated timestamp for both the user and the total statistics document
+   * and the selected languages.
    *
    * - Updates the user's document with the incremented character count and timestamp.
    * - Updates the total statistics document with the incremented character count and timestamp.
    * - Count = text length x number of target languages.
    *
    * @param {number} count Number of characters to add to both user and total character counts.
-   * @param {string[]} selectedLanguages Array of target language codes selected for the translation.
+   * @param {string[]} selectedLanguages Array of target language codes selected for translation.
    * @return {Promise<void>} A promise that resolves when both user and total counts are updated.
    * @throws {Error} If an error occurs during the update operation.
    */
@@ -546,13 +563,15 @@ export class FirebaseFirestoreService {
   }
 
   /**
-   * Increments the consumed feature usage character count for the current user, used by secureFeature.
+   * Increments the consumed feature usage character count for the current user,
+   * used by secureFeature.
    * Also updates the lastUpdated timestamp for both the user and the total statistics document.
    *
    * - Updates the user's document with the incremented character count and timestamp.
    * - Updates the total statistics document with the incremented character count and timestamp.
    *
-   * @param {number} count Number of characters to add to the user's and total feature usage character counts.
+   * @param {number} count Number of characters to add to the user's and
+   *        total feature usage character counts.
    * @return {Promise<void>} A promise that resolves when both user and total counts are updated.
    * @throws {Error} If an error occurs during the update operation.
    */
@@ -576,8 +595,9 @@ export class FirebaseFirestoreService {
    * Updates the character count and target languages for the current user.
    * Internal helper for addTranslatedChars that updates the user's usage statistics.
    * @param {number} count Number of characters to add to the user's character count.
-   * @param {string[]} selectedLanguages Array of target language codes selected for the translation.
-   * @return {Promise<void>} A promise that resolves when the user's character count and target languages are updated.
+   * @param {string[]} selectedLanguages Array of target language codes selected for translation.
+   * @return {Promise<void>} A promise that resolves
+   *          when the user's character count and target languages are updated.
    * @throws {Error} If an error occurs during the update operation.
    */
   private async updateUserCharCountAndTargetLanguages(
@@ -619,7 +639,8 @@ export class FirebaseFirestoreService {
 
   /**
    * Updates the total feature/translation character count across all users for the current month.
-   * Internal helper for addTranslatedChars and addConsumedFeatureChars that updates global usage statistics.
+   * Internal helper for addTranslatedChars and addConsumedFeatureChars that updates global usage
+   * statistics.
    * @param {number} count Number of characters to add to the total character count.
    * @return {Promise<void>} A promise that resolves when the total character count is updated.
    * @throws {Error} If an error occurs during the update operation.

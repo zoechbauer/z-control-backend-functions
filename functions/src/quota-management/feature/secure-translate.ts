@@ -1,4 +1,4 @@
-import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { onCall, CallableRequest, HttpsError } from 'firebase-functions/v2/https';
 import { defineSecret } from 'firebase-functions/params';
 import dotenv from 'dotenv';
 import path from 'node:path';
@@ -11,6 +11,7 @@ import {
 } from '../../shared/firebase-firestore.interfaces.js';
 import { FirebaseFirestoreService } from '../services/firebase-firestore.service.js';
 import { FireStoreConstants } from '../../shared/app.constants.js';
+import { GoogleTranslateResponse } from '../../shared/google-translate.interfaces.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ const GOOGLE_TRANSLATE_API_KEY = defineSecret('GOOGLE_TRANSLATE_API_KEY');
  */
 export const secureTranslate = onCall(
   { secrets: [GOOGLE_TRANSLATE_API_KEY] },
-  async (request) => {
+  async (request: CallableRequest) => {
     const { data, auth } = request;
     if (!auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated.');
@@ -66,11 +67,10 @@ export const secureTranslate = onCall(
         selectedLanguages,
       );
       return translationResult;
-    } catch (error: any) {
-      throw new HttpsError(
-        'internal',
-        error.message || 'Error translating text.',
-      );
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Error translating text.';
+      throw new HttpsError('internal', message);
     }
   },
 );
@@ -78,13 +78,13 @@ export const secureTranslate = onCall(
 /**
  * Validates the request for secureTranslate Cloud Function.
  * Throws HttpsError if validation fails.
- * @param { any } auth - Authentication information.
+ * @param { CallableRequest<SecureTranslateData> } auth - Authentication information.
  * @param { string } text - Input text for translation.
  * @param { string } baseLang - Base language code.
  * @param { string[] } selectedLanguages - Array of target language codes.
  */
 async function validateSecureTranslateRequest(
-  auth: any,
+  auth: CallableRequest<SecureTranslateData>['auth'],
   text: string,
   baseLang: string,
   selectedLanguages: string[],
@@ -140,8 +140,9 @@ async function translateTextOrThrow(
         `Translation API error: ${response.statusText}`,
       );
     }
-    const respData: any = await response.json();
-    translations[target] = String(respData.data.translations[0].translatedText);
+    const respData = (await response.json()) as GoogleTranslateResponse;
+    const translated = respData.data?.translations?.[0]?.translatedText ?? '';
+    translations[target] = translated;
   }
   return { translations };
 }

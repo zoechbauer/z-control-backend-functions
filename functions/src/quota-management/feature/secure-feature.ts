@@ -1,4 +1,4 @@
-import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { onCall, CallableRequest, HttpsError } from 'firebase-functions/v2/https';
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
 import path from 'node:path';
@@ -21,36 +21,37 @@ if (admin.apps?.length === 0) {
  * Callable function that validates input, enforces contingent limits, updates usage,
  * and returns simulated function call.
  */
-export const secureFeature = onCall(async (request) => {
-  const auth = request.auth;
-  const appId = request.data?.appId;
-  const text = request.data?.text;
+export const secureFeature = onCall(
+  async (request: CallableRequest<{ appId: string; text: string }>) => {
+    const auth = request.auth;
+    const appId = request.data?.appId;
+    const text = request.data?.text;
 
-  await validateSecureFeatureRequest(auth, text, appId);
+    await validateSecureFeatureRequest(auth, text, appId);
 
-  const collection = FireStoreConstants.getCollectionByAppId(appId);
-  await FirebaseFirestoreUtilsService.validateFeatureContingentOrThrow(
-    collection,
-    auth!.uid,
-  );
+    const collection = FireStoreConstants.getCollectionByAppId(appId);
+    await FirebaseFirestoreUtilsService.validateFeatureContingentOrThrow(
+      collection,
+      auth ? auth.uid : '',
+    );
 
-  const functionResult: FeatureResult = await executeFunctionApiOrThrow(text);
+    const functionResult: FeatureResult = await executeFunctionApiOrThrow(text);
 
-  const firestoreService = new FirebaseFirestoreService(collection, auth!.uid);
-  await firestoreService.addConsumedFeatureChars(text.length);
+    const firestoreService = new FirebaseFirestoreService(collection, auth ? auth.uid : '');
+    await firestoreService.addConsumedFeatureChars(text.length);
 
-  return functionResult;
-});
+    return functionResult;
+  });
 
 /**
  * Validates the request for secureFeature Cloud Function.
  * Throws HttpsError if validation fails.
- * @param { any } auth - Authentication information.
+ * @param { CallableRequest } auth - Authentication information.
  * @param { string } text - Input text for the feature.
  * @param { string } appId - Application ID.
  */
 async function validateSecureFeatureRequest(
-  auth: any,
+  auth: CallableRequest<{ appId: string; text: string }>['auth'],
   text: string,
   appId: string,
 ): Promise<void> {

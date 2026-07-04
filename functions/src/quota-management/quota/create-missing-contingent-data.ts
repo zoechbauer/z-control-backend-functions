@@ -19,8 +19,15 @@ export const createMissingContingentData = onCall(async (request) => {
   }
 
   const featureType = request.data?.featureType;
-  if (featureType !== undefined && featureType !== FeatureType.MLT && featureType !== FeatureType.Feature) {
-    throw new HttpsError('invalid-argument', 'featureType must be either undefined for MLT or "feature".');
+  if (
+    featureType !== undefined &&
+    featureType !== FeatureType.MLT &&
+    featureType !== FeatureType.Feature
+  ) {
+    throw new HttpsError(
+      'invalid-argument',
+      'featureType must be either undefined for MLT or "feature".',
+    );
   }
 
   try {

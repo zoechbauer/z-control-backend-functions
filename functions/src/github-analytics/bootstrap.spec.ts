@@ -42,7 +42,7 @@ describe('bootstrap', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
     const logger = await import('firebase-functions/logger');
 
     await import('./bootstrap.js');
@@ -64,7 +64,7 @@ describe('bootstrap', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
     const logger = await import('firebase-functions/logger');
 
     await import('./bootstrap.js');

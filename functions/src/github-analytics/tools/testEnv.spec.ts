@@ -30,7 +30,7 @@ describe('testEnv', () => {
   });
 
   it('should log GITHUB_TOKEN to console', async () => {
-    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
 
     // Set a test value for GITHUB_TOKEN
     process.env.GITHUB_TOKEN = 'test_token_value';

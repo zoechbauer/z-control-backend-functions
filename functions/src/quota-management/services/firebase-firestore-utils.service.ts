@@ -23,11 +23,12 @@ export class FirebaseFirestoreUtilsService {
   }
 
   /**
- * Checks whether translation contingent limits are exceeded for a user.
- * @param {ContingentData} flags The contingent data flags
- * @param {string} userId The user ID to check
- * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded, false otherwise
- */
+   * Checks whether translation contingent limits are exceeded for a user.
+   * @param {ContingentData} flags The contingent data flags
+   * @param {string} userId The user ID to check
+   * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded,
+   *    false otherwise
+   */
   async isContingentExceeded(
     flags: ContingentData,
     userId: string,
@@ -51,7 +52,7 @@ export class FirebaseFirestoreUtilsService {
    * Checks whether the contingent for a specific user is exceeded.
    * @param {ContingentData} flags The contingent data flags
    * @param {string} userId The user ID to check
-   * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded, false otherwise
+   * @return {Promise<boolean>} A promise: true if the contingent is exceeded, false otherwise
    */
   private async isContingentForUserExceeded(
     flags: ContingentData,
@@ -68,7 +69,7 @@ export class FirebaseFirestoreUtilsService {
   /**
    * Checks whether the total contingent for all users is exceeded.
    * @param {ContingentData} flags The contingent data flags
-   * @return {Promise<boolean>} A promise that resolves to true if the total contingent is exceeded, false otherwise
+   * @return {Promise<boolean>} A promise: true if the contingent is exceeded, false otherwise
    */
   private async isTotalContingentExceeded(
     flags: ContingentData,
@@ -86,7 +87,8 @@ export class FirebaseFirestoreUtilsService {
    * Validates the contingent for the user and throws if exceeded or not found.
    * @param {string} collection The Firestore collection name
    * @param {string} userId The user ID to validate
-   * @return {Promise<void>} A promise that resolves if the contingent is valid, or throws an error if exceeded
+   * @return {Promise<void>} A promise that resolves if the contingent is valid,
+   * or throws an error if exceeded
    */
   static async validateContingentOrThrow(
     collection: string,
@@ -117,10 +119,11 @@ export class FirebaseFirestoreUtilsService {
   }
 
   /**
- * Validates the feature contingent for the user and throws if exceeded or not found.
+   * Validates the feature contingent for the user and throws if exceeded or not found.
    * @param {string} collection The Firestore collection name
    * @param {string} userId The user ID to validate
-   * @return {Promise<void>} A promise that resolves if the feature contingent is valid, or throws an error if exceeded
+   * @return {Promise<void>} A promise that resolves if the feature contingent is valid,
+   *      or throws an error if exceeded
    */
   static async validateFeatureContingentOrThrow(
     collection: string,
@@ -152,8 +155,8 @@ export class FirebaseFirestoreUtilsService {
 
   /**
    * Normalizes contingent data to a unified format.
-   * @param {FeatureContingentData | FirestoreContingentData} flags The contingent data to normalize.
-   * @return {ContingentData} The normalized contingent data.
+   * @param {FeatureContingentData | FirestoreContingentData} flags Contingent data to normalize.
+   * @return {ContingentData} Normalized contingent data.
    */
   private static normalizeContingentData(
     flags: FeatureContingentData | FirestoreContingentData,
@@ -188,12 +191,12 @@ export class FirebaseFirestoreUtilsService {
   }
 
   /**
- * Performs a deep equality check between two objects.
-   * @param {any} obj1 The first object to compare
-   * @param {any} obj2 The second object to compare
+   * Performs a deep equality check between two objects.
+   * @param {unknown} obj1 The first object to compare
+   * @param {unknown} obj2 The second object to compare
    * @return {boolean} True if the objects are deeply equal, false otherwise
    */
-  static isDeepEqual(obj1: any, obj2: any): boolean {
+  static isDeepEqual(obj1: unknown, obj2: unknown): boolean {
     if (obj1 === obj2) return true;
     if (obj1 == null || obj2 == null) return false;
     if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
@@ -207,7 +210,10 @@ export class FirebaseFirestoreUtilsService {
     if (JSON.stringify(keys1) !== JSON.stringify(keys2)) return false;
 
     for (const key of keys1) {
-      if (!FirebaseFirestoreUtilsService.isDeepEqual(obj1[key], obj2[key])) {
+      if (!FirebaseFirestoreUtilsService.isDeepEqual(
+        (obj1 as Record<string, unknown>)[key],
+        (obj2 as Record<string, unknown>)[key]
+      )) {
         return false;
       }
     }

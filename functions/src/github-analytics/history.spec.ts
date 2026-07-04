@@ -182,7 +182,7 @@ describe('saveGithubAnalyticsTrafficHistory', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
 
     await mod.saveGithubAnalyticsTrafficHistory(
       'zoechbauer',
@@ -322,7 +322,7 @@ describe('getHistoryEntries', () => {
       mod.getHistoryEntries({
         views: [{ timestamp: '2026-06-25', count: 1 }],
         clones: [{ timestamp: '2026-06-25', count: 2 }],
-      } as any),
+      }),
     ).toEqual({
       historyViews: [{ timestamp: '2026-06-25', count: 1 }],
       historyClones: [{ timestamp: '2026-06-25', count: 2 }],
@@ -330,7 +330,7 @@ describe('getHistoryEntries', () => {
   });
 
   it('returns empty arrays for invalid input', () => {
-    expect(mod.getHistoryEntries({} as any)).toEqual({
+    expect(mod.getHistoryEntries({})).toEqual({
       historyViews: [],
       historyClones: [],
     });

@@ -101,7 +101,7 @@ describe('testGitHubAnalytics', () => {
     );
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
     const { req, res } = makeReqRes();
 
     await mod.testGitHubAnalytics(req, res);
@@ -129,7 +129,7 @@ describe('testGitHubAnalytics', () => {
     );
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
     const { req, res } = makeReqRes();
 
     await mod.testGitHubAnalytics(req, res);

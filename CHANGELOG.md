@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
-## [2.2] - 2026-07-02
+## [2.2] - 2026-07-04
 
 ### Added
 
@@ -13,13 +13,19 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - Added loadEnv.ts to load environment variables from .env.local for local development.
 - Added rimraf as a dev dependency to provide a cross-platform way to remove files and directories.
 - Added JSDoc comments to all backend functions to improve documentation and maintainability.
-- Removed extra spaces between function names and parentheses to match standard JavaScript formatting and improve readability.
 
 ### Changed
 
 - Updated package.json scripts to add a prebuild step that uses rimraf to clean the lib directory before building.
 - Moved environment loading out of bootstrap.ts; it is now handled by loadEnv.ts in the project root.
 - Updated unit test import paths to match the refactored folder structure. 220 tests cover 99.65% of the code, ensuring that all functions are thoroughly tested and validated.
+- Reduced the line length limit in the ESLint configuration to 100 characters, and updated function descriptions to improve readability and maintainability.
+
+### Fixed
+
+- Enabled no-explicit-any for production code and resolved all related lint errors, improving type safety and maintainability. The rule remains disabled for test files to preserve flexibility in test setups.
+- Enabled linting for empty functions and fixed all reported issues to enforce clearer, more intentional code.
+- Enabled no-non-null-assertion and removed non-null assertions from the codebase to improve type safety and reduce potential runtime errors.
 
 ## [2.1] - 2026-06-29
 

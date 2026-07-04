@@ -167,7 +167,7 @@ describe('processRepo', () => {
     );
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => ({}));
 
     await mod.processRepo('zoechbauer', 'z-control-ionic-setup', true);
 
