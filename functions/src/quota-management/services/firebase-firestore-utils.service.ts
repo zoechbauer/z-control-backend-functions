@@ -23,16 +23,12 @@ export class FirebaseFirestoreUtilsService {
   }
 
   /**
-   * Checks whether translation contingent limits are exceeded for a user.
+   * Checks whether translation contingent limits are exceeded for current user.
    * @param {ContingentData} flags The contingent data flags
-   * @param {string} userId The user ID to check
    * @return {Promise<boolean>} A promise that resolves to true if the contingent is exceeded,
    *    false otherwise
    */
-  async isContingentExceeded(
-    flags: ContingentData,
-    userId: string,
-  ): Promise<boolean> {
+  async isContingentExceeded(flags: ContingentData): Promise<boolean> {
     // 1. If translation is globally stopped for all users
     if (flags.StopForAllUsers) {
       return true;
@@ -42,27 +38,25 @@ export class FirebaseFirestoreUtilsService {
       return true;
     }
     // 3. If the contingent for the current user is exceeded
-    if (await this.isContingentForUserExceeded(flags, userId)) {
+    if (await this.isCurrentUserContingentExceeded(flags)) {
       return true;
     }
     return false;
   }
 
   /**
-   * Checks whether the contingent for a specific user is exceeded.
+   * Checks whether the contingent for the current user is exceeded.
    * @param {ContingentData} flags The contingent data flags
-   * @param {string} userId The user ID to check
    * @return {Promise<boolean>} A promise: true if the contingent is exceeded, false otherwise
    */
-  private async isContingentForUserExceeded(
+  private async isCurrentUserContingentExceeded(
     flags: ContingentData,
-    userId: string,
   ): Promise<boolean> {
     const limit = flags.maxFreeCharsPerMonthForUser;
     if (limit === undefined) {
       return true;
     }
-    const charCount = await this.firestoreService.getCharCountForUser();
+    const charCount = await this.firestoreService.getCharCountForCurrentUser();
     return charCount >= limit;
   }
 
@@ -109,7 +103,7 @@ export class FirebaseFirestoreUtilsService {
     const utilsService = new FirebaseFirestoreUtilsService(firestoreService);
     const flagsUnified: ContingentData =
       FirebaseFirestoreUtilsService.normalizeContingentData(flags);
-    if (await utilsService.isContingentExceeded(flagsUnified, userId)) {
+    if (await utilsService.isContingentExceeded(flagsUnified)) {
       console.error('Contingent exceeded for user:', userId);
       throw new (await import('firebase-functions/v2/https')).HttpsError(
         'resource-exhausted',
@@ -144,7 +138,7 @@ export class FirebaseFirestoreUtilsService {
     const utilsService = new FirebaseFirestoreUtilsService(firestoreService);
     const flagsUnified: ContingentData =
       FirebaseFirestoreUtilsService.normalizeContingentData(flags);
-    if (await utilsService.isContingentExceeded(flagsUnified, userId)) {
+    if (await utilsService.isContingentExceeded(flagsUnified)) {
       console.error('Contingent exceeded for user:', userId);
       throw new (await import('firebase-functions/v2/https')).HttpsError(
         'resource-exhausted',
@@ -210,10 +204,12 @@ export class FirebaseFirestoreUtilsService {
     if (JSON.stringify(keys1) !== JSON.stringify(keys2)) return false;
 
     for (const key of keys1) {
-      if (!FirebaseFirestoreUtilsService.isDeepEqual(
-        (obj1 as Record<string, unknown>)[key],
-        (obj2 as Record<string, unknown>)[key]
-      )) {
+      if (
+        !FirebaseFirestoreUtilsService.isDeepEqual(
+          (obj1 as Record<string, unknown>)[key],
+          (obj2 as Record<string, unknown>)[key],
+        )
+      ) {
         return false;
       }
     }

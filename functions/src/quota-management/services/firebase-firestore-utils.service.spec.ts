@@ -1,6 +1,5 @@
-import { beforeEach, describe, it, expect, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the entire FirebaseFirestoreService module because of static validateContingentOrThrow
 vi.mock('./firebase-firestore.service.js', () => ({
   FirebaseFirestoreService: vi.fn(),
 }));
@@ -14,24 +13,6 @@ import {
 import { FirebaseFirestoreService } from './firebase-firestore.service.js';
 
 describe('FirebaseFirestoreUtilsService.isDeepEqual', () => {
-  let left: any;
-  let right: any;
-
-  beforeEach(() => {
-    left = {
-      a: 1,
-      nested: {
-        count: 5,
-      },
-    };
-    right = {
-      a: 1,
-      nested: {
-        count: 5,
-      },
-    };
-  });
-
   it('returns true for deeply equal objects with different key order', () => {
     const left = {
       b: 2,
@@ -54,31 +35,34 @@ describe('FirebaseFirestoreUtilsService.isDeepEqual', () => {
   });
 
   it('returns false for objects with different nested values', () => {
-    right.nested.count = 10;
+    const left = { a: 1, nested: { count: 5 } };
+    const right = { a: 1, nested: { count: 10 } };
+
     expect(FirebaseFirestoreUtilsService.isDeepEqual(left, right)).toBe(false);
   });
 
-  it('returns false if object is null', () => {
-    right = null;
-    expect(FirebaseFirestoreUtilsService.isDeepEqual(left, right)).toBe(false);
+  it('returns false if one object is null', () => {
+    expect(FirebaseFirestoreUtilsService.isDeepEqual({ a: 1 }, null)).toBe(
+      false,
+    );
   });
 
-  it('returns false if object have different length', () => {
-    right = { a: 1 };
-    expect(FirebaseFirestoreUtilsService.isDeepEqual(left, right)).toBe(false);
+  it('returns false if objects have different lengths', () => {
+    expect(
+      FirebaseFirestoreUtilsService.isDeepEqual({ a: 1, b: 2 }, { a: 1 }),
+    ).toBe(false);
   });
 
-  it('returns false if object have different keys', () => {
-    right = {
-      'a-different': 1,
-      'nested': {
-        count: 5,
-      },
-    };
-    expect(FirebaseFirestoreUtilsService.isDeepEqual(left, right)).toBe(false);
+  it('returns false if objects have different keys', () => {
+    expect(
+      FirebaseFirestoreUtilsService.isDeepEqual(
+        { a: 1, nested: { count: 5 } },
+        { 'a': 1, 'a-different': 1, 'nested': { count: 5 } },
+      ),
+    ).toBe(false);
   });
 
-  it('returns true for same object reference (fast path)', () => {
+  it('returns true for same object reference', () => {
     const same = { a: 1, nested: { count: 5 } };
     expect(FirebaseFirestoreUtilsService.isDeepEqual(same, same)).toBe(true);
   });
@@ -95,63 +79,61 @@ describe('FirebaseFirestoreUtilsService.isDeepEqual', () => {
 describe('isContingentExceeded', () => {
   it('returns true if StopForAllUsers is set', async () => {
     const service = new FirebaseFirestoreUtilsService({} as any);
-    const result = await service.isContingentExceeded(
-      { StopForAllUsers: true } as any,
-      'userId',
-    );
-    expect(result).toBe(true);
+
+    await expect(
+      service.isContingentExceeded({ StopForAllUsers: true } as ContingentData),
+    ).resolves.toBe(true);
   });
 
   it('returns true if total contingent is exceeded', async () => {
     const service = new FirebaseFirestoreUtilsService({} as any);
-    const isTotalContingentExceededSpy = vi
-      .spyOn(service as any, 'isTotalContingentExceeded')
-      .mockResolvedValue(true);
-
-    const result = await service.isContingentExceeded(
-      { StopForAllUsers: false } as any,
-      'userId',
+    vi.spyOn(service as any, 'isTotalContingentExceeded').mockResolvedValue(
+      true,
     );
 
-    expect(isTotalContingentExceededSpy).toHaveBeenCalled();
+    const result = await service.isContingentExceeded({
+      StopForAllUsers: false,
+    } as ContingentData);
+
     expect(result).toBe(true);
+    expect((service as any).isTotalContingentExceeded).toHaveBeenCalledOnce();
   });
 
-  it('returns true if contingent for user is exceeded', async () => {
+  it('returns true if contingent for current user is exceeded', async () => {
     const service = new FirebaseFirestoreUtilsService({} as any);
-    const isTotalContingentExceededSpy = vi
-      .spyOn(service as any, 'isTotalContingentExceeded')
-      .mockResolvedValue(false);
-    const isContingentForUserExceededSpy = vi
-      .spyOn(service as any, 'isContingentForUserExceeded')
-      .mockResolvedValue(true);
-
-    const result = await service.isContingentExceeded(
-      { StopForAllUsers: false } as any,
-      'userId',
+    vi.spyOn(service as any, 'isTotalContingentExceeded').mockResolvedValue(
+      false,
     );
+    vi.spyOn(
+      service as any,
+      'isCurrentUserContingentExceeded',
+    ).mockResolvedValue(true);
 
-    expect(isTotalContingentExceededSpy).toHaveBeenCalled();
-    expect(isContingentForUserExceededSpy).toHaveBeenCalled();
+    const result = await service.isContingentExceeded({
+      StopForAllUsers: false,
+    } as ContingentData);
+
     expect(result).toBe(true);
+    expect((service as any).isTotalContingentExceeded).toHaveBeenCalledOnce();
+    expect(
+      (service as any).isCurrentUserContingentExceeded,
+    ).toHaveBeenCalledOnce();
   });
 
   it('returns false if all checks fail', async () => {
     const service = new FirebaseFirestoreUtilsService({} as any);
-    const isTotalContingentExceededSpy = vi
-      .spyOn(service as any, 'isTotalContingentExceeded')
-      .mockResolvedValue(false);
-    const isContingentForUserExceededSpy = vi
-      .spyOn(service as any, 'isContingentForUserExceeded')
-      .mockResolvedValue(false);
-
-    const result = await service.isContingentExceeded(
-      { StopTranslationForAllUsers: false } as any,
-      'userId',
+    vi.spyOn(service as any, 'isTotalContingentExceeded').mockResolvedValue(
+      false,
     );
+    vi.spyOn(
+      service as any,
+      'isCurrentUserContingentExceeded',
+    ).mockResolvedValue(false);
 
-    expect(isTotalContingentExceededSpy).toHaveBeenCalled();
-    expect(isContingentForUserExceededSpy).toHaveBeenCalled();
+    const result = await service.isContingentExceeded({
+      StopForAllUsers: false,
+    } as ContingentData);
+
     expect(result).toBe(false);
   });
 });
@@ -164,83 +146,103 @@ describe('isTotalContingentExceeded', () => {
     maxFreeCharsPerMonthForUser: 10_000,
   };
 
-  it('returns true if total contingent limit is missing (undefined guard)', async () => {
+  it('returns true if total contingent limit is missing', async () => {
     const firestoreServiceMock = {
-      getTotalCharCount: async () => 0,
+      getTotalCharCount: vi.fn(),
     };
+
     const service = new FirebaseFirestoreUtilsService(
       firestoreServiceMock as any,
     );
+
     const result = await (service as any).isTotalContingentExceeded({
-      StopTranslationForAllUsers: false,
-    } as any);
+      StopForAllUsers: false,
+    } as ContingentData);
+
     expect(result).toBe(true);
+    expect(firestoreServiceMock.getTotalCharCount).not.toHaveBeenCalled();
   });
 
   it('returns true if total char count exceeds limit minus buffer', async () => {
     const firestoreServiceMock = {
-      getTotalCharCount: async () => 495_000,
+      getTotalCharCount: vi.fn().mockResolvedValue(495_000),
     };
+
     const service = new FirebaseFirestoreUtilsService(
       firestoreServiceMock as any,
     );
+
     const result = await (service as any).isTotalContingentExceeded(
       contingentData,
     );
 
-    expect(result).toBe(true); // 495_000 >= 500_000 - 5_000
+    expect(result).toBe(true);
+    expect(firestoreServiceMock.getTotalCharCount).toHaveBeenCalledOnce();
   });
 
   it('returns false if total char count is within limit minus buffer', async () => {
     const firestoreServiceMock = {
-      getTotalCharCount: async () => 494_000, // below 495_000
+      getTotalCharCount: vi.fn().mockResolvedValue(494_000),
     };
+
     const service = new FirebaseFirestoreUtilsService(
       firestoreServiceMock as any,
     );
+
     const result = await (service as any).isTotalContingentExceeded(
       contingentData,
     );
 
-    expect(result).toBe(false); // 494_000 < 495_000
+    expect(result).toBe(false);
+    expect(firestoreServiceMock.getTotalCharCount).toHaveBeenCalledOnce();
   });
 });
 
-describe('isContingentForUserExceeded', () => {
+describe('isCurrentUserContingentExceeded', () => {
   it('returns true if user char count exceeds per-user limit', async () => {
     const contingentData = {
       maxFreeCharsPerMonthForUser: 10_000,
-    } as any;
+    } as ContingentData;
+
     const firestoreServiceMock = {
-      getCharCountForUser: async () => 10_000,
+      getCharCountForCurrentUser: vi.fn().mockResolvedValue(10_000),
     };
+
     const service = new FirebaseFirestoreUtilsService(
       firestoreServiceMock as any,
     );
-    const result = await (service as any).isContingentForUserExceeded(
+
+    const result = await (service as any).isCurrentUserContingentExceeded(
       contingentData,
-      'userId',
     );
-    expect(result).toBe(true); // 10_000 >= 10_000
+
+    expect(result).toBe(true);
+    expect(
+      firestoreServiceMock.getCharCountForCurrentUser,
+    ).toHaveBeenCalledOnce();
   });
 
-  it('returns true if user contingent data is undefined', async () => {
-    const contingentData = {};
+  it('returns true if user contingent limit is missing', async () => {
     const firestoreServiceMock = {
-      getCharCountForUser: async () => 10_000,
+      getCharCountForCurrentUser: vi.fn(),
     };
+
     const service = new FirebaseFirestoreUtilsService(
       firestoreServiceMock as any,
     );
-    const result = await (service as any).isContingentForUserExceeded(
-      contingentData,
-      'userId',
+
+    const result = await (service as any).isCurrentUserContingentExceeded(
+      {} as ContingentData,
     );
-    expect(result).toBe(true); // 10_000 >= 10_000
+
+    expect(result).toBe(true);
+    expect(
+      firestoreServiceMock.getCharCountForCurrentUser,
+    ).not.toHaveBeenCalled();
   });
 });
 
-describe('validateContingentOrThrow', () => {
+describe('FirebaseFirestoreUtilsService.validateContingentOrThrow', () => {
   const userId = 'testUserId';
   const collection = 'testCollection';
 
@@ -248,8 +250,8 @@ describe('validateContingentOrThrow', () => {
     vi.clearAllMocks();
   });
 
-  it('logs if firestore contingent data is not found', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
+  it('creates missing contingent data if not found', async () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
@@ -259,8 +261,6 @@ describe('validateContingentOrThrow', () => {
         .mockResolvedValueOnce(undefined)
         .mockResolvedValueOnce({ any: 'flags' });
       this.createMissingContingentData = vi.fn().mockResolvedValue(undefined);
-      this.getCharCountAndTargetLangsForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
     });
 
     vi.spyOn(
@@ -278,9 +278,7 @@ describe('validateContingentOrThrow', () => {
     expect(logSpy).toHaveBeenCalledWith(
       `Contingent data not found in collection ${collection} for user ${userId} -> created`,
     );
-    expect(
-      FirebaseFirestoreService as unknown as { mock: { instances: any[] } },
-    ).toHaveBeenCalledWith(collection, userId);
+    expect(FirebaseFirestoreService).toHaveBeenCalledWith(collection, userId);
   });
 
   it('throws if contingent is exceeded', async () => {
@@ -288,9 +286,7 @@ describe('validateContingentOrThrow', () => {
       this: any,
     ) {
       this.readContingentData = vi.fn().mockResolvedValue({ any: 'flags' });
-      this.createMissingContingentData = vi.fn();
-      this.getCharCountForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
+      this.createMissingContingentData = vi.fn().mockResolvedValue(undefined);
     });
 
     vi.spyOn(
@@ -303,17 +299,15 @@ describe('validateContingentOrThrow', () => {
         collection,
         userId,
       ),
-    ).rejects.toThrow('Translation contingent exceeded');
-  }, 10000);
+    ).rejects.toThrow('Translation contingent exceeded.');
+  });
 
   it('resolves if contingent is not exceeded', async () => {
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readContingentData = vi.fn().mockResolvedValue({ any: 'flags' });
-      this.createMissingContingentData = vi.fn();
-      this.getCharCountForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
+      this.createMissingContingentData = vi.fn().mockResolvedValue(undefined);
     });
 
     vi.spyOn(
@@ -330,7 +324,7 @@ describe('validateContingentOrThrow', () => {
   });
 });
 
-describe('validateFeatureContingentOrThrow', () => {
+describe('FirebaseFirestoreUtilsService.validateFeatureContingentOrThrow', () => {
   const userId = 'testUserId';
   const collection = 'testCollection';
 
@@ -338,8 +332,8 @@ describe('validateFeatureContingentOrThrow', () => {
     vi.clearAllMocks();
   });
 
-  it('logs if firestore contingent data is not found', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => ({}));
+  it('creates missing feature contingent data if not found', async () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
@@ -351,8 +345,6 @@ describe('validateFeatureContingentOrThrow', () => {
       this.createMissingFeatureContingentData = vi
         .fn()
         .mockResolvedValue(undefined);
-      this.getCharCountForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
     });
 
     vi.spyOn(
@@ -370,21 +362,19 @@ describe('validateFeatureContingentOrThrow', () => {
     expect(logSpy).toHaveBeenCalledWith(
       `Contingent data not found in collection ${collection} for user ${userId} -> created`,
     );
-    expect(
-      FirebaseFirestoreService as unknown as { mock: { instances: any[] } },
-    ).toHaveBeenCalledWith(collection, userId);
+    expect(FirebaseFirestoreService).toHaveBeenCalledWith(collection, userId);
   });
 
-  it('throws if contingent is exceeded', async () => {
+  it('throws if feature contingent is exceeded', async () => {
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
       this: any,
     ) {
       this.readFeatureContingentData = vi
         .fn()
         .mockResolvedValue({ any: 'flags' });
-      this.createMissingFeatureContingentData = vi.fn();
-      this.getCharCountForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
+      this.createMissingFeatureContingentData = vi
+        .fn()
+        .mockResolvedValue(undefined);
     });
 
     vi.spyOn(
@@ -397,8 +387,8 @@ describe('validateFeatureContingentOrThrow', () => {
         collection,
         userId,
       ),
-    ).rejects.toThrow('Feature contingent exceeded');
-  }, 10000);
+    ).rejects.toThrow('Feature contingent exceeded.');
+  });
 
   it('resolves if feature contingent is not exceeded', async () => {
     vi.mocked(FirebaseFirestoreService).mockImplementation(function(
@@ -407,9 +397,9 @@ describe('validateFeatureContingentOrThrow', () => {
       this.readFeatureContingentData = vi
         .fn()
         .mockResolvedValue({ any: 'flags' });
-      this.createMissingFeatureContingentData = vi.fn();
-      this.getCharCountForUser = vi.fn();
-      this.getTotalCharCount = vi.fn();
+      this.createMissingFeatureContingentData = vi
+        .fn()
+        .mockResolvedValue(undefined);
     });
 
     vi.spyOn(
@@ -426,17 +416,13 @@ describe('validateFeatureContingentOrThrow', () => {
   });
 });
 
-describe('normalizeContingentData', () => {
-  let normalizedContingentData: ContingentData;
-
-  beforeEach(() => {
-    normalizedContingentData = {
-      StopForAllUsers: false,
-      maxFreeCharsPerMonth: 500_000,
-      maxFreeCharsBufferPerMonth: 5_000,
-      maxFreeCharsPerMonthForUser: 10_000,
-    };
-  });
+describe('FirebaseFirestoreUtilsService.normalizeContingentData', () => {
+  const normalizedContingentData: ContingentData = {
+    StopForAllUsers: false,
+    maxFreeCharsPerMonth: 500_000,
+    maxFreeCharsBufferPerMonth: 5_000,
+    maxFreeCharsPerMonthForUser: 10_000,
+  };
 
   it('maps feature contingent data structure to normalized structure', () => {
     const contingentData: FeatureContingentData = {
@@ -445,19 +431,21 @@ describe('normalizeContingentData', () => {
       maxFreeFeatureCharsBufferPerMonth: 5_000,
       maxFreeFeatureCharsPerMonthForUser: 10_000,
     };
+
     const normalized = (
       FirebaseFirestoreUtilsService as any
     ).normalizeContingentData(contingentData);
     expect(normalized).toEqual(normalizedContingentData);
   });
 
-  it('maps MLT contingent data structure to normalized structure', () => {
+  it('maps translation contingent data structure to normalized structure', () => {
     const contingentData: FirestoreContingentData = {
       StopTranslationForAllUsers: false,
       maxFreeTranslateCharsPerMonth: 500_000,
       maxFreeTranslateCharsBufferPerMonth: 5_000,
       maxFreeTranslateCharsPerMonthForUser: 10_000,
     };
+
     const normalized = (
       FirebaseFirestoreUtilsService as any
     ).normalizeContingentData(contingentData);

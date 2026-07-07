@@ -1,4 +1,3 @@
-// TODO: fix deactivated rules and remove comments
 module.exports = {
   root: true,
   env: {
@@ -39,8 +38,6 @@ module.exports = {
       'after',
       { overrides: { '?': 'before', ':': 'before' } },
     ],
-    'no-invalid-this': 0, // <-- deactivated: 'this' in tests
-    '@typescript-eslint/no-unused-vars': 0, // <-- deactivated: unused variables
     'max-len': [
       'error',
       {
@@ -57,6 +54,8 @@ module.exports = {
       files: ['**/*.spec.ts', '**/*.test.ts'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-invalid-this': 'off',
+        'no-invalid-this': 'off',
       },
     },
   ],

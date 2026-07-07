@@ -70,16 +70,28 @@ export class FirebaseFirestoreService {
    * @return {Promise<CharCountAndTargetLangsResult>} Promise with charCount and targetLanguages.
    * @throws {Error} If the document read operation fails.
    */
-  async getCharCountAndTargetLangsForUser(): Promise<CharCountAndTargetLangsResult> {
-    const doc = await this.db
-      .doc(`${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`)
-      .get();
-    return doc.exists && doc.data()?.charCount
-      ? {
-        charCount: doc.data()?.charCount,
-        targetLanguages: doc.data()?.targetLanguages || [],
+  async getCharCountAndTargetLangsForCurrentUser(): Promise<CharCountAndTargetLangsResult> {
+    try {
+      const doc = await this.db
+        .doc(
+          `${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`,
+        )
+        .get();
+
+      if (doc.exists && doc.data()?.charCount) {
+        return {
+          charCount: doc.data()?.charCount,
+          targetLanguages: doc.data()?.targetLanguages || [],
+        };
       }
-      : { charCount: 0, targetLanguages: [] };
+      return { charCount: 0, targetLanguages: [] };
+    } catch (error) {
+      console.error(
+        `Error getting char count and target languages for current user: ${this.userId}`,
+        error,
+      );
+      throw error;
+    }
   }
 
   /**
@@ -89,15 +101,23 @@ export class FirebaseFirestoreService {
    * If the user document doesn't exist or lacks character count data, returns 0.
    *
    * @return {Promise<number>} Promise resolving to the character count as a number.
-   * @throws {Error} If the document read operation fails.
+   * @throws {Error} If the document read operation fails
    */
-  async getCharCountForUser(): Promise<number> {
-    const doc = await this.db
-      .doc(
-        `${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`,
-      )
-      .get();
-    return doc.exists && doc.data()?.charCount ? doc.data()?.charCount : 0;
+  async getCharCountForCurrentUser(): Promise<number> {
+    try {
+      const doc = await this.db
+        .doc(
+          `${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`,
+        )
+        .get();
+      return doc.exists && doc.data()?.charCount ? doc.data()?.charCount : 0;
+    } catch (error) {
+      console.error(
+        `Error getting char count for current user: ${this.userId}`,
+        error,
+      );
+      throw error;
+    }
   }
 
   /**
@@ -119,7 +139,10 @@ export class FirebaseFirestoreService {
         .get();
       return doc.exists && doc.data()?.charCount ? doc.data()?.charCount : 0;
     } catch (error) {
-      console.error('Error getting total char count:', error);
+      console.error(
+        `Error getting total char count for collection: ${this.collection}`,
+        error,
+      );
       throw error;
     }
   }
@@ -218,12 +241,12 @@ export class FirebaseFirestoreService {
    * @throws {Error} Is caught and logged for individual device update failures.
    *
    * @example
-   * // Initial setup - called once from client
+   * -- Initial setup - called once from client
    * await service.updateProgrammerDeviceUIDs([
    *   { userId: 'abc123', name: 'Hans-Laptop' }
    * ]);
-   * // After this, update UIDs directly in Firestore programmerDevices collection or
-   * // change .env.local and call again to sync new UIDs without redeploying.
+   * -- After this, update UIDs directly in Firestore programmerDevices collection or
+   * -- change .env.local and call again to sync new UIDs without redeploying.
    */
   async updateProgrammerDeviceUIDs(
     programmerDeviceUIDs: ProgrammerDeviceUID[],
@@ -248,7 +271,7 @@ export class FirebaseFirestoreService {
   }
 
   /**
- * Updates or creates a user mapping document for a single programmer device.
+   * Updates or creates a user mapping document for a single programmer device.
    * Internal helper for updateProgrammerDeviceUIDs.
    * @param {ProgrammerDeviceUID} device - Programmer device object
    *        containing userId and device name.
@@ -547,7 +570,7 @@ export class FirebaseFirestoreService {
     if (!this.userId) return;
 
     try {
-      await this.updateUserCharCountAndTargetLanguages(
+      await this.updateCharCountAndTargetLanguagesForCurrentUser(
         count,
         selectedLanguages,
       );
@@ -577,9 +600,8 @@ export class FirebaseFirestoreService {
    */
   async addConsumedFeatureChars(count: number): Promise<void> {
     if (!this.userId) return;
-
     try {
-      await this.updateUserCharCount(count);
+      await this.updateCharCountForCurrentUser(count);
     } catch (error) {
       console.error('Error writing user char count document:', error);
     }
@@ -600,7 +622,7 @@ export class FirebaseFirestoreService {
    *          when the user's character count and target languages are updated.
    * @throws {Error} If an error occurs during the update operation.
    */
-  private async updateUserCharCountAndTargetLanguages(
+  private async updateCharCountAndTargetLanguagesForCurrentUser(
     count: number,
     selectedLanguages: string[],
   ): Promise<void> {
@@ -624,7 +646,7 @@ export class FirebaseFirestoreService {
    * @return {Promise<void>} A promise that resolves when the user's character count is updated.
    * @throws {Error} If an error occurs during the update operation.
    */
-  private async updateUserCharCount(count: number): Promise<void> {
+  private async updateCharCountForCurrentUser(count: number): Promise<void> {
     const docRef = this.db.doc(
       `${FireStoreConstants.getUsersCollectionPath(this.collection)}/${this.userId}`,
     );
