@@ -13,10 +13,10 @@
     "test:learn": "vitest run --config vitest.learn.config.ts",
     "test:learn:watch": "vitest --config vitest.learn.config.ts",
     "test:coverage": "vitest run --coverage",
-    "serve": "npm run build && firebase emulators:start --only functions,firestore",
+    "serve": "npm run build && call .\\run-firebase-emulators.cmd",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run serve",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "npm run build && firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "type": "module",

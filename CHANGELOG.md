@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.4] - 2026-07-08
+
+### Added
+
+- Added `run-firebase-emulators.cmd` to set Java 25 and run Firebase emulators for local development. Firebase emulators will drop support for Java versions below 21 in firebase-tools@15, so this script ensures a compatible runtime is used.
+
+### Changed
+
+- Updated package.json scripts to use the new `run-firebase-emulators.cmd` script for running Firebase emulators, ensuring that Java 25 is set before starting the emulators.
+- Updated the README with instructions for running Firebase emulators using the new script.
+- Added `used-java-versions.md` to document the Java versions used in this repository and linked it from the docs index.
+- Marked the TODO list as complete after resolving all listed items.
+
 ## [2.3] - 2026-07-07
 
 ### Changed

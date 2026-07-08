@@ -2,7 +2,7 @@
 
 This document tracks open activities and follow-up tasks for the **z-control Backend Functions** project. It is used to coordinate ongoing backend work, keep priorities visible, and ensure important tasks are completed.
 
-## Open tasks
+## Open tasks - all closed tasks are marked with [x]
 
 - [x] Move functions from the z-control Landing Page project to this backend repository.
 - [x] Update documentation to reflect the new repository structure and function locations.
@@ -19,4 +19,4 @@ This document tracks open activities and follow-up tasks for the **z-control Bac
 - [x]   Enabled no-explicit-any for production code and fixed all related lint errors while keeping tests exempt.
 - [x]   Enabled no-unused-vars and removed unused variables across the codebase to improve maintainability.
 - [x]   Enabled no-invalid-this for production code. No errors were found in the production code, but tests were exempted from this rule.
-- [ ]   Emulators: firebase-tools will drop support for Java version < 21 soon in firebase-tools@15. Please install a JDK at version 21 or above to get a compatible runtime.
+- [x]   Emulators: firebase-tools will drop support for Java version < 21 soon in firebase-tools@15. Please install a JDK at version 21 or above to get a compatible runtime.

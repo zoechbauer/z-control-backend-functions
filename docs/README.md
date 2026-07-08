@@ -74,6 +74,11 @@ Overview of different test types for frontend and backend, with examples and bes
 - **github-analytics-explanation.md**  
   Explanation of GitHub Analytics metrics, including clones, unique clones, visitors, and unique visitors. Provides examples and clarifies how GitHub counts these metrics.
 
+## E. Java Versions
+
+- **used-java-versions.md**
+  Explanation of the Java versions used in this repository, including Java 25 for Firebase emulators and Java 17 for Firebase Admin SDK, with rationale for each choice.
+
 ---
 
 Each document is self-contained and addresses a specific aspect of the app's development or deployment. For further details, open the relevant markdown file in this folder.

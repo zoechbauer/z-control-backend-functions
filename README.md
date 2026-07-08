@@ -2,7 +2,7 @@
 
 Shared backend repository for z-control applications.
 
-This repository contains the shared backend logic used by multiple z-control apps, including Firebase Cloud Functions, Firestore utilities, and related backend helpers. It is the canonical source for backend code that must stay consistent across the different frontend applications. 
+This repository contains the shared backend logic used by multiple z-control apps, including Firebase Cloud Functions, Firestore utilities, and related backend helpers.It is the canonical source for backend code that must stay consistent across the different frontend applications.
 
 ## What belongs here
 
@@ -12,63 +12,66 @@ This repository is intended for:
 - z-control GitHub Analytics functions and related documentation.
 - Shared backend constants and services.
 - Backend unit tests and test utilities.
-- Documentation for backend development and deployment. 
+- Documentation for backend development and deployment.
 
-This repository is not intended for frontend application code. Frontend-specific changes belong in the respective app repositories. 
+This repository is not intended for frontend application code.Frontend-specific changes belong in the respective app repositories.
 
 ## Features
 
-- Central source of truth for shared backend code across z-control apps. 
-- Firebase Cloud Functions for data processing, API handling, and Firebase integration. 
-- Firestore utilities and rules-related backend support. 
-- Quota management and backend-side error handling. 
+- Central source of truth for shared backend code across z-control apps.
+- Firebase Cloud Functions for data processing, API handling, and Firebase integration.
+- Firestore utilities and rules-related backend support.
+- Quota management and backend-side error handling.
 - GitHub Analytics functions for automated traffic data fetching and Firestore storage.
-- Unit tests with Vitest and coverage reporting. 
-- Documentation for setup, usage, and development workflows. 
+- Unit tests with Vitest and coverage reporting.
+- Documentation for setup, usage, and development workflows.
 
 ## Repository policy
 
-- Implement shared backend changes only in this repository. 
-- Deploy shared Firebase Functions only from this repository. 
-- Do not deploy shared backend code from frontend repositories. 
-- Keep frontend repositories independent, but connected to this shared backend. 
+- Implement shared backend changes only in this repository.
+- Deploy shared Firebase Functions only from this repository.
+- Do not deploy shared backend code from frontend repositories.
+- Keep frontend repositories independent, but connected to this shared backend.
 
-This separation keeps backend behavior consistent and reduces deployment risk across all z-control apps. 
+This separation keeps backend behavior consistent and reduces deployment risk across all z-control apps.
 
 ## Tech stack
 
-- TypeScript. 
-- Firebase Cloud Functions and Firestore. 
-- Vitest for unit testing. 
-- Istanbul for coverage. 
-- ESLint for linting. 
+- TypeScript.
+- Firebase Cloud Functions and Firestore.
+- Vitest for unit testing.
+- Istanbul for coverage.
+- ESLint for linting.
+- Java 21 or above for Firebase emulators (required by firebase-tools@15 and later).
+- Java 17 for Firebase Admin SDK (required by firebase-tools versions prior to 15).
 
 ## Project structure
 
 ```text
 z-control-backend-functions/
 ├── functions/
-│   ├── lib/                  # Compiled output for deployment
-│   ├── node_modules/         # Node dependencies
-│   ├── src/                  # Source code
-│   │   ├── learning-vitest/  # Vitest learning resources
-│   │   ├── shared/           # Shared backend utilities
-│   │   ├── github-analytics/ # GitHub Analytics functions
-│   │   ├── quota-management/ # Quota management functions
-│   │   ├── loadEnv.js        # Environment variable loader
-│   │   └── index.ts          # exports for all functions
-│   ├── tsconfig.json         # TypeScript config
-│   ├── tsconfig.dev.json     # TypeScript dev config
-│   ├── vitest.config.ts      # Vitest config
+│   ├── lib/                            # Compiled output for deployment
+│   ├── node_modules/                   # Node dependencies
+│   ├── src/                            # Source code
+│   │   ├── learning-vitest/            # Vitest learning resources
+│   │   ├── shared/                     # Shared backend utilities
+│   │   ├── github-analytics/           # GitHub Analytics functions
+│   │   ├── quota-management/           # Quota management functions
+│   │   ├── loadEnv.js                  # Environment variable loader
+│   │   └── index.ts                    # exports for all functions
+│   ├── tsconfig.json                   # TypeScript config
+│   ├── tsconfig.dev.json               # TypeScript dev config
+│   ├── vitest.config.ts                # Vitest config
 │   ├── vitest.learn.config.ts
-│   ├── package.json          # Scripts and dependencies
+│   ├── run-firebase-emulators.cmd      # sets Java 21 and runs Firebase emulators
+│   ├── package.json                    # Scripts and dependencies
 │   ├── package-lock.json
 │   ├── .eslintrc.cjs
 │   └── .gitignore
 ├── docs/
 │   ├── unit-tests/
-│   ├── README.md             # Documentation index
-│   └── *.md                  # Documentation files   
+│   ├── README.md                       # Documentation index
+│   └── *.md                            # Documentation files
 ├── .firebaserc
 ├── firebase.json
 ├── LICENSE
@@ -80,21 +83,21 @@ z-control-backend-functions/
 
 When you need backend changes for a frontend app:
 
-1. Implement the shared backend change in this repository.
-2. Run and verify the backend locally with Firebase emulators.
-3. Connect the target frontend app to the emulator backend.
-4. Test the frontend/backend integration.
-5. Deploy Firebase Functions from this repository only.
-6. Deploy the frontend app separately after backend validation. 
+1.Implement the shared backend change in this repository.
+2.Run and verify the backend locally with Firebase emulators with `npm start`.
+3.Connect the target frontend app to the emulator backend.
+4.Test the frontend/backend integration.
+5.Deploy Firebase Functions from this repository only with `npm run deploy`.
+6.Deploy the frontend app separately after backend validation.
 
-This workflow ensures one shared backend source of truth and predictable deployments. 
+This workflow ensures one shared backend source of truth and predictable deployments.
 
 ## Getting started
 
 ### Prerequisites
 
 - Node.js v20 or compatible version.
-- Firebase CLI. 
+- Firebase CLI.
 
 ### Installation
 
@@ -108,8 +111,7 @@ npm install
 
 ```bash
 cd functions
-firebase init emulators  # Select Functions and Firestore only, configure ports
-firebase emulators:start
+npm start  # This will set java 25 and run the Firebase emulators
 ```
 
 ## Testing
@@ -135,21 +137,21 @@ npm run lint
 npm run lint -- --fix
 ```
 
-## TODOs and Documentation
+## Documentation
 
-- [TODO list: Open Activities](docs/TODO-list-open-activities.md)
-- [Documentation index](docs/README.md) 
+- [Used Java Versions](docs/used-java-versions.md)
+- [Documentation index](docs/README.md)
 
 ## Tools
 
 The `tools/` folder contains helper scripts for:
 - Backing up non-committed files.
 
-See `tools/README.md` for details. 
+See `tools/README.md` for details.
 
 ## Privacy
 
-This repository is a local development utility for backend work. It does not collect or store personal data, and it does not use analytics or tracking services. 
+This repository is a local development utility for backend work.It does not collect or store personal data, and it does not use analytics or tracking services.
 
 ## License
 
