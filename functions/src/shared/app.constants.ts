@@ -16,12 +16,14 @@ export class FireStoreConstants {
   // Constants for GitHub analytics collections are defined in ./GitHubConstants.ts
 
   /**
-   * The name of the Firestore collection used for storing contingent data and user mapping.
-   * This collection is used to manage user translation and feature usage statistics.
+   * The name of the Firestore collectionS used for storing contingent data and user mapping.
+   * These collections are used to manage user translation and feature usage statistics.
    * @type {string}
    * @readonly
    */
-  static readonly COLLECTION_NAME = 'ZC_ionic_setup';
+  static readonly COLLECTION_IONIC_SETUP = 'ZC_ionic_setup';
+  static readonly COLLECTION_TRANSLATOR = 'MLT_translations_statistics';
+  static readonly COLLECTION_IMAGE_TO_TEXT = 'ZC_image_to_text_statistics';
 
   /**
    * Mapping of app IDs to their corresponding Firestore collection names.
@@ -31,9 +33,9 @@ export class FireStoreConstants {
    * @throws {HttpsError} Throws an HttpsError if an unsupported appId is provided.
    */
   private static readonly APP_TO_COLLECTION: Record<string, string> = {
-    ionic_setup: FireStoreConstants.COLLECTION_NAME,
-    translator: 'MLT_translations_statistics',
-    image_to_text: 'ZC_image_to_text_statistics',
+    ionic_setup: FireStoreConstants.COLLECTION_IONIC_SETUP,
+    translator: FireStoreConstants.COLLECTION_TRANSLATOR,
+    image_to_text: FireStoreConstants.COLLECTION_IMAGE_TO_TEXT,
   };
 
   /**

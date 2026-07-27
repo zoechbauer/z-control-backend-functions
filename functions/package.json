@@ -13,7 +13,7 @@
     "test:learn": "vitest run --config vitest.learn.config.ts",
     "test:learn:watch": "vitest --config vitest.learn.config.ts",
     "test:coverage": "vitest run --coverage",
-    "serve": "npm run build && call .\\run-firebase-emulators.cmd",
+    "serve": ".\\run-firebase-emulators.cmd",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run serve",
     "deploy": "npm run build && firebase deploy --only functions",
@@ -26,6 +26,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@google-cloud/storage": "^7.12.0",
+    "@google-cloud/vision": "^5.3.7",
     "dotenv": "^17.2.3",
     "firebase-admin": "^12.6.0",
     "firebase-functions": "^7.1.0"

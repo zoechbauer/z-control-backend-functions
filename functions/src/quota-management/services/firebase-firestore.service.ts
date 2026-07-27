@@ -164,15 +164,29 @@ export class FirebaseFirestoreService {
 
   /**
    * If the feature contingent data document is missing, it creates it with default values.
+   * Default values depend on collection.
    * Existing values are never overwritten.
    */
   async createMissingFeatureContingentData(): Promise<void> {
-    const contingentData: FeatureContingentData = {
-      StopFeatureUsageForAllUsers: false,
-      maxFreeFeatureCharsPerMonthForUser: 10000,
-      maxFreeFeatureCharsPerMonth: 500000,
-      maxFreeFeatureCharsBufferPerMonth: 5000,
-    };
+    let contingentData: FeatureContingentData;
+
+    if (this.collection === FireStoreConstants.COLLECTION_IMAGE_TO_TEXT) {
+      // important note: chars here are counted as 1 per image,
+      // not per character in the extracted text
+      contingentData = {
+        StopFeatureUsageForAllUsers: false,
+        maxFreeFeatureCharsPerMonthForUser: 50,
+        maxFreeFeatureCharsPerMonth: 1000, // 1000 images per month free for all users
+        maxFreeFeatureCharsBufferPerMonth: 100,
+      };
+    } else {
+      contingentData = {
+        StopFeatureUsageForAllUsers: false,
+        maxFreeFeatureCharsPerMonthForUser: 10000,
+        maxFreeFeatureCharsPerMonth: 500000, // 500k chars per month free for all users
+        maxFreeFeatureCharsBufferPerMonth: 5000,
+      };
+    }
 
     await this.createMissingContingentDataExec(contingentData);
   }

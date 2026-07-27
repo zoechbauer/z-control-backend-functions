@@ -25,22 +25,6 @@ export interface ContingentData {
   maxFreeCharsBufferPerMonth?: number;
   maxFreeCharsPerMonthForUser?: number;
 }
-export interface SecureTranslateData {
-  appId: string;
-  text: string;
-  baseLang: string;
-  selectedLanguages: string[];
-}
-export interface TranslationResult {
-  translations: Record<string, string>;
-}
-export interface SecureFeatureData {
-  appId: string;
-  text: string;
-}
-export interface FeatureResult {
-  feature: Record<string, string>;
-}
 export interface CharCountAndTargetLangsResult {
   charCount: number;
   targetLanguages: string[];
@@ -75,4 +59,31 @@ export interface UpdateProgrammerDeviceUIDsData {
   appId: string;
   userId?: string;
   programmerDeviceUIDs: ProgrammerDeviceUID[];
+}
+export interface SecureTranslateData {
+  appId: string;
+  text: string;
+  baseLang: string;
+  selectedLanguages: string[];
+}
+export interface TranslationResult {
+  translations: Record<string, string>;
+}
+export interface SecureFeatureData {
+  appId: string;
+  text: string;
+}
+export interface FeatureResult {
+  feature: Record<string, string>;
+}
+
+// TODO use interface and clarify mode
+export interface RecognizeInputData {
+  appId: string;
+  imageBase64: string;
+  mode: 'document' | 'image';
+}
+export interface RecognizeResult {
+  text: string;
+  featureType: string;
 }
