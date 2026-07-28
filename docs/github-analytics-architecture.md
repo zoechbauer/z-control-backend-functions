@@ -2,22 +2,18 @@
 
 ## Table of Contents
 
-- [1. Overview](#1-overview)
-- [2. Firestore Structure](#2-firestore-structure)
-- [3. Shared Constants](#3-shared-constants)
-- [4. Cloud Function Implementation](#4-cloud-function-implementation)
-- [5. Environment Setup](#5-environment-setup)
-- [6. Frontend Integration Example](#6-frontend-integration-example)
-
-This document describes the architecture for automated fetching and storage of GitHub traffic analytics (views and clones) for the following repositories:
-
-- `zoechbauer/z-control-landing-page`
-- `zoechbauer/z-control-qr-code-generator`
-- `zoechbauer/z-control-multi-language-translator`
-- `zoechbauer/z-control-Backup-scripts`
-- `zoechbauer/copilot-learning-calculator`
-
-The analytics data is retrieved via a scheduled Firebase Cloud Function and stored in Firestore for display in the landing page app.
+- [GitHub Analytics Architecture for z-control Projects](#github-analytics-architecture-for-z-control-projects)
+  - [Table of Contents](#table-of-contents)
+  - [1. Overview](#1-overview)
+  - [2. Firestore Structure](#2-firestore-structure)
+  - [3. Shared Constants](#3-shared-constants)
+  - [4. Cloud Function Implementation](#4-cloud-function-implementation)
+    - [Example: `githubAnalytics.ts` (with query parameters)](#example-githubanalyticsts-with-query-parameters)
+  - [5. Environment Setup](#5-environment-setup)
+  - [6. Frontend Integration Example (Landing Page)](#6-frontend-integration-example-landing-page)
+  - [7. Security \& Best Practices](#7-security--best-practices)
+  - [8. References](#8-references)
+  - [9. ADDING NEW REPOS \& Local Testing with Firebase Emulator Suite](#9-adding-new-repos--local-testing-with-firebase-emulator-suite)
 
 ---
 
@@ -37,16 +33,24 @@ The analytics data is retrieved via a scheduled Firebase Cloud Function and stor
 ```text
 githubAnalyticsTraffic/
   ├─ copilot-learning-calculator
+  ├─ ionic-angular21-vitest-setup
+  ├─ z-control-image-to-text
+  ├─ z-control-ionic-setup
   ├─ z-control-multi-language-translator
-  ├─ z-control-Backup-scripts
+  ├─ z-control-backend-functions
   ├─ z-control-qr-code-generator
+  ├─ z-control-Backup-scripts
   └─ z-control-landing-page
 
 githubAnalyticsTrafficHistory/
   ├─ copilot-learning-calculator
+  ├─ ionic-angular21-vitest-setup
+  ├─ z-control-image-to-text
+  ├─ z-control-ionic-setup
   ├─ z-control-multi-language-translator
-  ├─ z-control-Backup-scripts
+  ├─ z-control-backend-functions
   ├─ z-control-qr-code-generator
+  ├─ z-control-Backup-scripts
   └─ z-control-landing-page
 ```
 
@@ -71,7 +75,11 @@ export const REPOS = [
   { owner: 'zoechbauer', repo: 'z-control-qr-code-generator' },
   { owner: 'zoechbauer', repo: 'z-control-Backup-scripts' },
   { owner: 'zoechbauer', repo: 'z-control-multi-language-translator' },
+  { owner: 'zoechbauer', repo: 'z-control-ionic-setup' },
+  { owner: 'zoechbauer', repo: 'z-control-backend-functions' },
+  { owner: 'zoechbauer', repo: 'z-control-image-to-text' },
   { owner: 'zoechbauer', repo: 'copilot-learning-calculator' },
+  { owner: 'zoechbauer', repo: 'ionic-angular21-vitest-setup' },
 ];
 
 export const COLLECTION = {
@@ -92,7 +100,6 @@ export const COLLECTION = {
 - **Storage:**
   - `githubAnalyticsTraffic`: Overwrites with the latest analytics snapshot.
   - `githubAnalyticsTrafficHistory`: Appends only the previous day's entries to arrays.
-
 
 ### Example: `githubAnalytics.ts` (with query parameters)
 
@@ -229,6 +236,6 @@ async function fetchAnalytics() {
 - [Firebase Functions Documentation](https://firebase.google.com/docs/functions)
 - [Firestore Documentation](https://firebase.google.com/docs/firestore)
 
-## 9. Local Testing with Firebase Emulator Suite when adding new repos
+## 9. ADDING NEW REPOS & Local Testing with Firebase Emulator Suite
 
 For detailed instructions, refer to [github-analytics-test-locally.md](github-analytics-test-locally.md).

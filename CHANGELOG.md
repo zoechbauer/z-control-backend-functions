@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.6] - 2026-07-28
+
+### Changed
+
+- Updated the `REPOS` constant in `GitHubConstants.ts` to include the new `z-control-image-to-text` repository, ensuring that analytics data is collected for this repository as well.
+- Updated documentation and unit tests to reflect the addition of the `z-control-image-to-text` repository in the GitHub analytics architecture, ensuring that all references and tests are consistent with the updated repository list.
+
 ## [2.5] - 2026-07-27
 
 ### Added

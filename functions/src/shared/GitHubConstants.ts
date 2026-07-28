@@ -14,6 +14,7 @@ export const REPOS = [
   { owner: 'zoechbauer', repo: 'z-control-multi-language-translator' },
   { owner: 'zoechbauer', repo: 'z-control-ionic-setup' },
   { owner: 'zoechbauer', repo: 'z-control-backend-functions' },
+  { owner: 'zoechbauer', repo: 'z-control-image-to-text' },
   { owner: 'zoechbauer', repo: 'copilot-learning-calculator' },
   { owner: 'zoechbauer', repo: 'ionic-angular21-vitest-setup' },
 ];
